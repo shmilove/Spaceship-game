@@ -8,11 +8,11 @@ public class Sprite
     protected int imageWidth, imageHeight; // image dimensions
     
     protected int angle;
-    protected double speed, locX, locY;
+    protected double speed, locX, locY, hp;
     protected int pWidth, pHeight;  // panel's dimensions
     protected boolean isCollide;
     
-    public Sprite(double x, double y, int w, int h, int speed, int angle) 
+    public Sprite(double x, double y, int w, int h, double speed, int angle, double hp) 
     {
         locX = x;
         locY = y;
@@ -20,6 +20,7 @@ public class Sprite
         this.angle = angle;
         pWidth = w;
         pHeight = h;
+        this.hp = hp;
         isCollide = false;
     }
     
@@ -75,7 +76,18 @@ public class Sprite
     {
         return imageHeight;
     }
+    public double getHp()
+    {
+    	return hp;
+    }
     
+    public boolean hasMoreHp(double gotHurt)
+    {
+    	hp = hp - gotHurt;
+    	if(hp<=0)
+    		return false;
+    	return true;
+    }
     public void updateSprite()
     {
     	double radian = Math.toRadians(360 - angle);

@@ -9,12 +9,12 @@ import javax.imageio.ImageIO;
 
 public class SpaceshipSprite extends Sprite
 {
-	public SpaceshipSprite(double x, double y, int w, int h) 
+	public SpaceshipSprite(double x, double y, int w, int h, double hitPionts, int angle,String imgString, double speed) 
 	{
-		super(x, y, w, h, 0, 90);
+		super(x, y, w, h, speed, angle, hitPionts);
 		try 
 		{
-			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//spaceship.png")));
+			setImage(ImageIO.read(new File(System.getProperty("user.dir") + imgString)));
 		} 
 		catch (IOException e) 
 		{
@@ -22,23 +22,23 @@ public class SpaceshipSprite extends Sprite
 		}
 	}
 	
-	public void turnLeft()
-	{
-		angle += Settings.ROTATION_SPEED;
-	}
+//	public void turnLeft()
+//	{
+//		angle += Settings.ROTATION_SPEED;
+//	}
+//	
+//	public void turnRight()
+//	{
+//		angle -= Settings.ROTATION_SPEED;
+//	}
 	
-	public void turnRight()
-	{
-		angle -= Settings.ROTATION_SPEED;
-	}
-	
-	public void speedUp()
-	{
-		if (speed >= Settings.MAX_SPEED)
-			speed = Settings.MAX_SPEED;
-		else
-			speed += Settings.SPEED_INCREASE_RATE;
-	}
+//	public void speedUp()
+//	{
+//		if (speed >= Settings.MAX_SPEED)
+//			speed = Settings.MAX_SPEED;
+//		else
+//			speed += Settings.SPEED_INCREASE_RATE;
+//	}
 	
 	public void stop()
 	{
