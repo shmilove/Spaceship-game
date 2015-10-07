@@ -9,6 +9,13 @@ public class Settings
 	public static final int NUM_OF_LIVES = 3;
 	public static final int SHOT_THRESHOLD = 150;
 	
+	
+	//enemy1 ship
+	public static final int ENEMY1WIDTH = 32;
+	public static final int ENEMY1HIGHT = 42;
+	public static final int ENEMY1WIDTHSPACE = 50;
+	public static final int ENEMY1HIGHTSPACE = 50;
+	
 	// Spaceship
 	public static final int ROTATION_SPEED = 5;
 	public static final double SPEED_INCREASE_RATE = 0.1;

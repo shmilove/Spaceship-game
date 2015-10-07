@@ -18,10 +18,11 @@ public class GameEngine
 	private Image lifeImage;
 	private RibbonsManager rManager;
 	private boolean gameStart;
-
+	private LinkedList<SpaceshipSprite> myEnemies;
 	private boolean win, lose;
 	private int score;
 	private SpaceshipSprite spaceship;
+	private SpaceshipSprite enemy;
 	//	private LinkedList<BulletSprite> bullets, deleteBullets;
 	//	private LinkedList<AsteroidSprite> asteroids, deleteAsteroids, addAsteroids;
 	private long lastShootTime;
@@ -31,13 +32,15 @@ public class GameEngine
 		width = pWidth;
 		height = pHeight;
 		lifeImage = Toolkit.getDefaultToolkit().getImage((new File(".")).getAbsolutePath() + "//life.png");
-
+		
 		rManager = new RibbonsManager(width, height);
 		gameStart = false;
-
+		myEnemies = new LinkedList<SpaceshipSprite>();
 		score = 0;
 		win = lose = false;
 		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
+		System.out.println(width / 2 - 45);
+		initializeEnemy();
 		//		bullets = new LinkedList<BulletSprite>();
 		//		deleteBullets = new LinkedList<BulletSprite>();
 		//		asteroids = new LinkedList<AsteroidSprite>();
@@ -53,6 +56,34 @@ public class GameEngine
 		rManager.moveDown();
 	}
 
+	private void initializeEnemy()
+	{
+		SpaceshipSprite enemy1, enemy2;
+		for (int i =0; i < 15; i++)
+		{
+			enemy1 = new SpaceshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
+			myEnemies.add(enemy1);
+			for (int j =0; j < 4; j++)
+			{
+				enemy2 = new SpaceshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, j*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
+				myEnemies.add(enemy2);
+				
+			}
+			
+		}
+		
+//		SpaceshipSprite enemy1 = new SpaceshipSprite(5, 1*2+40, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
+//		enemys.add(enemy1);
+//		SpaceshipSprite enemy2 = new SpaceshipSprite(5+enemy1.getImageWidth(), 1*2+40, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
+//		enemys.add(enemy2);
+//		for(int i = 0; i < 5; i++)
+//		{
+//			for(int j =0; j < 5; j++)
+//			{
+//				enemys[i][j] = new SpaceshipSprite(5+enemy1.getImageWidth(), 2+enemy1.getImageHeight(), width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
+//			}
+//		}
+	}
 	public boolean isGameOver()
 	{
 		return win || lose;
@@ -76,7 +107,18 @@ public class GameEngine
 		//			bullet.drawSprite(dbg);
 		//		for (AsteroidSprite asteroid : asteroids)
 		//			asteroid.drawSprite(dbg);
-
+		for (SpaceshipSprite spaceshipSprite : myEnemies) {
+			spaceshipSprite.drawSprite(dbg);
+		}
+//		for(int i = 0; i < 5; i++)
+//		{
+//			for(int j = 0; j < 5; j++)
+//			{
+//				enemys[i][j].drawSprite(dbg);;
+//			}
+//		}
+		
+		
 		for (int i = 0, x = 10; i < numOfLives; ++i, x+=50)
 		{
 			dbg.drawImage(lifeImage, x, 10, null);
