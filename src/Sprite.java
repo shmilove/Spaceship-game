@@ -7,12 +7,12 @@ public class Sprite
     protected BufferedImage bImage;
     protected int imageWidth, imageHeight; // image dimensions
     
-    protected int angle;
-    protected double speed, locX, locY, hp;
+    protected int angle, hp, speed;
+    protected int locX, locY;
     protected int pWidth, pHeight;  // panel's dimensions
     protected boolean isCollide;
     
-    public Sprite(double x, double y, int w, int h, double speed, int angle, double hp) 
+    public Sprite(int x, int y, int w, int h, int speed, int angle, int hp) 
     {
         locX = x;
         locY = y;
@@ -49,11 +49,13 @@ public class Sprite
         return new Rectangle((int)getLocX(), (int)getLocY(), imageWidth, imageHeight);
     }
 
-    public double getLocX() {
+    public double getLocX() 
+    {
         return locX;
     }
     
-    public double getLocY() {
+    public double getLocY() 
+    {
         return locY;
     }
     
@@ -76,40 +78,42 @@ public class Sprite
     {
         return imageHeight;
     }
+    
     public double getHp()
     {
     	return hp;
     }
     
-    public boolean hasMoreHp(double gotHurt)
+    public boolean hasMoreHp(int damage)
     {
-    	hp = hp - gotHurt;
-    	if(hp<=0)
+    	hp = hp - damage;
+    	
+    	if(hp <= 0)
     		return false;
+    	
     	return true;
     }
+    
     public void updateSprite()
     {
-    	double radian = Math.toRadians(360 - angle);
-    	// move at the x axis
-        locX += speed * Math.cos(radian);
-        if (locX >= pWidth + imageWidth)
-        	locX = 0 - imageWidth;
-        else if (locX < 0 - imageWidth)
-        	locX = pWidth;
-        // move at the y axis
-        locY += speed * Math.sin(radian);
-        if (locY >= pHeight)
-        	locY = 0 - imageHeight;
-        else if (locY < 0 - imageHeight)
-        	locY = pHeight;
+//    	double radian = Math.toRadians(360 - angle);
+//    	// move at the x axis
+//        locX += speed * Math.cos(radian);
+//        if (locX >= pWidth + imageWidth)
+//        	locX = 0 - imageWidth;
+//        else if (locX < 0 - imageWidth)
+//        	locX = pWidth;
+//        // move at the y axis
+//        locY += speed * Math.sin(radian);
+//        if (locY >= pHeight)
+//        	locY = 0 - imageHeight;
+//        else if (locY < 0 - imageHeight)
+//        	locY = pHeight;
     }
     
     public void drawSprite(Graphics2D g)
     {
        g.fillRect((int)locX, (int)locY, imageWidth, imageHeight);
     }
-    
-    
 }
 

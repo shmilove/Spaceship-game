@@ -15,7 +15,6 @@ public class Ribbon
         pHeight = h;
         this.moveInterval = moveInterval;
         imgHeight = img.getHeight();
-        System.out.println("imageH " + imgHeight + " pHeight " + pHeight);
         isMovingDown = false;
         yImgHead = 0;
     }

@@ -23,7 +23,6 @@ public class GamePanel extends JPanel implements Runnable
 
 	private GameEngine game;
 	private boolean keys[];
-	private boolean gameStart;
 
 	public GamePanel()
 	{
@@ -32,7 +31,6 @@ public class GamePanel extends JPanel implements Runnable
 		game = new GameEngine(PWIDTH, PHEIGHT);
 
 		keys = new boolean[150];
-		gameStart = false;
 
 		addKeyListener(new Listener());
 
@@ -97,6 +95,9 @@ public class GamePanel extends JPanel implements Runnable
 	{
 		if (keys[KeyEvent.VK_UP])
 			game.upKeyClicked();
+		
+		if (keys[KeyEvent.VK_DOWN])
+			game.downKeyClicked();
 
 		if (keys[KeyEvent.VK_LEFT])
 			game.leftKeyClicked();
@@ -117,11 +118,6 @@ public class GamePanel extends JPanel implements Runnable
 	{
 		public void keyPressed(KeyEvent e) 
 		{
-			if (e.getKeyCode() == KeyEvent.VK_SPACE)
-			{
-				if (!gameStart)
-					gameStart = true;
-			}
 			keys[e.getKeyCode()] = true;
 		}
 

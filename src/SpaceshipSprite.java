@@ -9,17 +9,45 @@ import javax.imageio.ImageIO;
 
 public class SpaceshipSprite extends Sprite
 {
-	public SpaceshipSprite(double x, double y, int w, int h, double hitPionts, int angle,String imgString, double speed) 
+	public SpaceshipSprite(int x, int y, int w, int h, int angle, int hp, int speed, String imgName) 
 	{
-		super(x, y, w, h, speed, angle, hitPionts);
+		super(x, y, w, h, speed, angle, hp);
 		try 
 		{
-			setImage(ImageIO.read(new File(System.getProperty("user.dir") + imgString)));
+			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "\\" + imgName)));
 		} 
 		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public void moveLeft()
+	{
+		locX -= speed;
+		if (locX <= 0)
+			locX = 0;
+	}
+	
+	public void moveRight()
+	{
+		locX += speed;
+		if (locX >= pWidth - imageWidth - 5)
+			locX = pWidth - imageWidth - 5;
+	}
+	
+	public void moveUp()
+	{
+		locY -= speed;
+		if (locY <= 0)
+			locY = 0;
+	}
+	
+	public void moveDown()
+	{
+		locY += speed;
+		if (locY >= pHeight - imageHeight - 35)
+			locY = pHeight - imageHeight - 35;
 	}
 	
 //	public void turnLeft()
@@ -47,16 +75,21 @@ public class SpaceshipSprite extends Sprite
 	
     public void drawSprite(Graphics2D g)
     {
-    	AffineTransform oldtrans = g.getTransform();
-	    AffineTransform trans = new AffineTransform();
-
-	    trans.setToIdentity();
-	    trans.rotate(Math.toRadians(90 - angle), locX, locY);
-	    trans.translate(locX-(imageWidth/2), locY-(imageHeight/2));
-	    g.setTransform(trans);
-	    g.drawImage(bImage, 0, 0, null);
-	    trans.setToIdentity();
-	    g.setTransform(oldtrans);
+//    	AffineTransform oldtrans = g.getTransform();
+//	    AffineTransform trans = new AffineTransform();
+//
+//	    trans.setToIdentity();
+//	    trans.rotate(Math.toRadians(90 - angle), locX, locY);
+//	    trans.translate(locX-(imageWidth/2), locY-(imageHeight/2));
+//	    g.setTransform(trans);
+	    g.drawImage(bImage, locX, locY, null);
+//	    trans.setToIdentity();
+//	    g.setTransform(oldtrans);
+    }
+    
+    public void updateSprite()
+    {
+    	
     }
     
     public Rectangle getBoundingBox()

@@ -14,6 +14,10 @@ public class Settings
 	public static final double SPEED_INCREASE_RATE = 0.1;
 	public static final int MAX_SPEED = 7;
 	
+	// Spaceship = Hero
+	public static final int HERO_SPEED = 3;
+	public static final int HERO_HP = 1;
+	
 	// Bullets
 	public static final int BULLET_SPEED = 8;
 	public static final int MAX_DISTANCE = 350;
