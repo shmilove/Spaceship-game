@@ -7,12 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-
-
-/**
- *
- * @author Shay Tavor
- */
 public class Chopper {
     private static final int LEFT = 1, RIGHT = 2;
     private BufferedImage imgRight, imgLeft;

@@ -1,15 +1,6 @@
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Shay Tavor
- */
 public class Ribbon 
 {
     private BufferedImage img;
