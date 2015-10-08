@@ -17,7 +17,7 @@ public class GameEngine
 	private Image bgImage;
 	private Image lifeImage;
 	private RibbonsManager rManager;
-	private boolean gameStart;
+	private boolean gameStart , moveLeft = true;
 	private LinkedList<SpaceshipSprite> myEnemies;
 	private boolean win, lose;
 	private int score;
@@ -40,7 +40,7 @@ public class GameEngine
 		win = lose = false;
 		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
 		System.out.println(width / 2 - 45);
-		initializeEnemy();
+		initializeStage1();
 		//		bullets = new LinkedList<BulletSprite>();
 		//		deleteBullets = new LinkedList<BulletSprite>();
 		//		asteroids = new LinkedList<AsteroidSprite>();
@@ -56,7 +56,7 @@ public class GameEngine
 		rManager.moveDown();
 	}
 
-	private void initializeEnemy()
+	private void initializeStage1()
 	{
 		SpaceshipSprite enemy1, enemy2;
 		for (int i =0; i < 15; i++)
@@ -72,17 +72,6 @@ public class GameEngine
 			
 		}
 		
-//		SpaceshipSprite enemy1 = new SpaceshipSprite(5, 1*2+40, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
-//		enemys.add(enemy1);
-//		SpaceshipSprite enemy2 = new SpaceshipSprite(5+enemy1.getImageWidth(), 1*2+40, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
-//		enemys.add(enemy2);
-//		for(int i = 0; i < 5; i++)
-//		{
-//			for(int j =0; j < 5; j++)
-//			{
-//				enemys[i][j] = new SpaceshipSprite(5+enemy1.getImageWidth(), 2+enemy1.getImageHeight(), width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
-//			}
-//		}
 	}
 	public boolean isGameOver()
 	{
@@ -110,13 +99,6 @@ public class GameEngine
 		for (SpaceshipSprite spaceshipSprite : myEnemies) {
 			spaceshipSprite.drawSprite(dbg);
 		}
-//		for(int i = 0; i < 5; i++)
-//		{
-//			for(int j = 0; j < 5; j++)
-//			{
-//				enemys[i][j].drawSprite(dbg);;
-//			}
-//		}
 		
 		
 		for (int i = 0, x = 10; i < numOfLives; ++i, x+=50)
@@ -153,7 +135,32 @@ public class GameEngine
 				doCollisionLogic();
 
 			removeBullets();
-
+			if(myEnemies.getFirst().getLocX()>0 && moveLeft)
+			{
+				for (SpaceshipSprite spaceshipSprite : myEnemies) {
+					spaceshipSprite.moveLeft();
+					try {
+					    Thread.sleep(1);                 
+					} catch(InterruptedException ex) {
+					    Thread.currentThread().interrupt();
+					}
+				}
+				if(myEnemies.getLast().getLocX() <= 447)
+					moveLeft = false;
+			}
+			if(!moveLeft)
+			{
+				for (SpaceshipSprite spaceshipSprite : myEnemies) {
+					spaceshipSprite.moveRight();
+					try {
+					    Thread.sleep(1);                 
+					} catch(InterruptedException ex) {
+					    Thread.currentThread().interrupt();
+					}
+				}
+			}
+			if(myEnemies.getLast().getLocX() == 563)
+				moveLeft = true;
 			spaceship.updateSprite();
 			//			for (BulletSprite bullet : bullets)
 			//				bullet.updateSprite();
