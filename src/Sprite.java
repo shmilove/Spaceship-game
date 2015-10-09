@@ -83,16 +83,15 @@ public class Sprite
     {
     	return hp;
     }
-    
-    public boolean hasMoreHp(int damage)
+    public void setHp(int newHp)
     {
-    	hp = hp - damage;
-    	
-    	if(hp <= 0)
-    		return false;
-    	
-    	return true;
+    	hp = newHp;
     }
+    public void setSpeed(int newSpeed)
+    {
+    	speed = newSpeed;
+    }
+    
     
     public void updateSprite()
     {

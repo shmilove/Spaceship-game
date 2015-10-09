@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 public class SpaceshipSprite extends Sprite
 {
+	protected boolean isDead = false;
 	public SpaceshipSprite(int x, int y, int w, int h, int angle, int hp, int speed, String imgName) 
 	{
 		super(x, y, w, h, speed, angle, hp);
@@ -86,7 +87,14 @@ public class SpaceshipSprite extends Sprite
 //	    trans.setToIdentity();
 //	    g.setTransform(oldtrans);
     }
-    
+    public void hasMoreHp(int damage)
+    {
+    	hp = hp - damage;
+    	
+    	if(hp <= 0)
+    		isDead = true;
+    	
+    }
     public void updateSprite()
     {
     	

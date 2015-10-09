@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.sql.Time;
+import java.time.Instant;
 import java.util.LinkedList;
 
 
@@ -18,11 +20,11 @@ public class GameEngine
 	private Image lifeImage;
 	private RibbonsManager rManager;
 	private boolean gameStart , moveLeft = true;
-	private LinkedList<SpaceshipSprite> myEnemies;
+	private LinkedList<EnemyshipSprite> myEnemies;
 	private boolean win, lose;
 	private int score;
 	private SpaceshipSprite spaceship;
-	private SpaceshipSprite enemy;
+	
 	//	private LinkedList<BulletSprite> bullets, deleteBullets;
 	//	private LinkedList<AsteroidSprite> asteroids, deleteAsteroids, addAsteroids;
 	private long lastShootTime;
@@ -35,12 +37,12 @@ public class GameEngine
 		
 		rManager = new RibbonsManager(width, height);
 		gameStart = false;
-		myEnemies = new LinkedList<SpaceshipSprite>();
+		myEnemies = new LinkedList<EnemyshipSprite>();
 		score = 0;
 		win = lose = false;
 		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
 		System.out.println(width / 2 - 45);
-		initializeStage1();
+		initializeStageOne();
 		//		bullets = new LinkedList<BulletSprite>();
 		//		deleteBullets = new LinkedList<BulletSprite>();
 		//		asteroids = new LinkedList<AsteroidSprite>();
@@ -56,21 +58,22 @@ public class GameEngine
 		rManager.moveDown();
 	}
 
-	private void initializeStage1()
+	private void initializeStageOne()
 	{
-		SpaceshipSprite enemy1, enemy2;
-		for (int i =0; i < 15; i++)
+		EnemyshipSprite enemy1, enemy2;
+		for (int i =0; i < Settings.ENEMYINAROW; i++)
 		{
-			enemy1 = new SpaceshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
+			enemy1 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
 			myEnemies.add(enemy1);
-			for (int j =0; j < 4; j++)
+			for (int j =0; j < Settings.ENEMYROWS; j++)
 			{
-				enemy2 = new SpaceshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, j*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
-				myEnemies.add(enemy2);
-				
+				enemy2 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, j*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
+				myEnemies.add(enemy2);	
 			}
 			
 		}
+		myEnemies.getFirst().hasMoreHp(2);
+		System.out.println(myEnemies.getFirst().getHp());
 		
 	}
 	public boolean isGameOver()
@@ -96,8 +99,9 @@ public class GameEngine
 		//			bullet.drawSprite(dbg);
 		//		for (AsteroidSprite asteroid : asteroids)
 		//			asteroid.drawSprite(dbg);
-		for (SpaceshipSprite spaceshipSprite : myEnemies) {
-			spaceshipSprite.drawSprite(dbg);
+		for (SpaceshipSprite EnemyshipSprite : myEnemies) {
+			if(EnemyshipSprite.getHp()>0)
+				EnemyshipSprite.drawSprite(dbg);
 		}
 		
 		
@@ -135,15 +139,24 @@ public class GameEngine
 				doCollisionLogic();
 
 			removeBullets();
+			long after = 0;
+			long now = System.currentTimeMillis();
 			if(myEnemies.getFirst().getLocX()>0 && moveLeft)
 			{
 				for (SpaceshipSprite spaceshipSprite : myEnemies) {
-					spaceshipSprite.moveLeft();
-					try {
-					    Thread.sleep(1);                 
-					} catch(InterruptedException ex) {
-					    Thread.currentThread().interrupt();
+					
+					if(now-after>=1)
+					{
+						spaceshipSprite.moveLeft();
+						
 					}
+					System.out.println(now-after);
+					after = System.currentTimeMillis();
+//					try {
+//					    Thread.sleep(1);                 
+//					} catch(InterruptedException ex) {
+//					    Thread.currentThread().interrupt();
+//					}
 				}
 				if(myEnemies.getLast().getLocX() <= 447)
 					moveLeft = false;
