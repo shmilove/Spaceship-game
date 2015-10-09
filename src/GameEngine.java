@@ -60,11 +60,9 @@ public class GameEngine
 
 	private void initializeStageOne()
 	{
-		EnemyshipSprite enemy1, enemy2;
+		EnemyshipSprite enemy2;
 		for (int i =0; i < Settings.ENEMYINAROW; i++)
 		{
-			enemy1 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
-			myEnemies.add(enemy1);
 			for (int j =0; j < Settings.ENEMYROWS; j++)
 			{
 				enemy2 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, j*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
@@ -72,8 +70,7 @@ public class GameEngine
 			}
 			
 		}
-		myEnemies.getFirst().hasMoreHp(2);
-		System.out.println(myEnemies.getFirst().getHp());
+		
 		
 	}
 	public boolean isGameOver()
@@ -113,7 +110,7 @@ public class GameEngine
 		dbg.setFont(new Font("Arial", Font.BOLD, 16));
 		dbg.setColor(Color.WHITE);
 		dbg.drawString("Score: " + score, width - 100, 30);
-
+		
 		if (!gameStart)
 		{
 			drawInstructions(dbg);
@@ -139,41 +136,14 @@ public class GameEngine
 				doCollisionLogic();
 
 			removeBullets();
-			long after = 0;
+
 			long now = System.currentTimeMillis();
-			if(myEnemies.getFirst().getLocX()>0 && moveLeft)
+			if (now - lastShootTime > Settings.SHOT_THRESHOLD)
 			{
-				for (SpaceshipSprite spaceshipSprite : myEnemies) {
-					
-					if(now-after>=1)
-					{
-						spaceshipSprite.moveLeft();
-						
-					}
-					System.out.println(now-after);
-					after = System.currentTimeMillis();
-//					try {
-//					    Thread.sleep(1);                 
-//					} catch(InterruptedException ex) {
-//					    Thread.currentThread().interrupt();
-//					}
-				}
-				if(myEnemies.getLast().getLocX() <= 447)
-					moveLeft = false;
+				moveEnemyShips();
+				lastShootTime = now;
 			}
-			if(!moveLeft)
-			{
-				for (SpaceshipSprite spaceshipSprite : myEnemies) {
-					spaceshipSprite.moveRight();
-					try {
-					    Thread.sleep(1);                 
-					} catch(InterruptedException ex) {
-					    Thread.currentThread().interrupt();
-					}
-				}
-			}
-			if(myEnemies.getLast().getLocX() == 563)
-				moveLeft = true;
+			
 			spaceship.updateSprite();
 			//			for (BulletSprite bullet : bullets)
 			//				bullet.updateSprite();
@@ -181,6 +151,29 @@ public class GameEngine
 			//				asteroid.updateSprite();
 		}
 
+	}
+	
+	private void moveEnemyShips()
+	{
+		if(myEnemies.getFirst().getLocX()>0 && moveLeft)
+		{
+			for (SpaceshipSprite spaceshipSprite : myEnemies) {		
+					spaceshipSprite.moveLeft();
+				}
+			
+			if(myEnemies.getLast().getLocX() <= 447)
+				moveLeft = false;
+		}
+		if(!moveLeft)
+		{
+			for (SpaceshipSprite spaceshipSprite : myEnemies) {
+				spaceshipSprite.moveRight();
+			}
+		}
+		if(myEnemies.getLast().getLocX() == 563)
+			moveLeft = true;
+		
+		
 	}
 
 	public void leftKeyClicked()
