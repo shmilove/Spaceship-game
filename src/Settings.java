@@ -29,7 +29,7 @@ public class Settings
 	
 	// Bullets
 	public static final int BULLET_SPEED = 8;
-	public static final int MAX_DISTANCE = 350;
+	public static final int MAX_DISTANCE = 650;
 	
 	// Asteroids
 	public static final int ASTEROID_SPEED = 2;

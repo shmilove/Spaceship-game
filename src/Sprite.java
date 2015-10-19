@@ -49,12 +49,12 @@ public class Sprite
         return new Rectangle((int)getLocX(), (int)getLocY(), imageWidth, imageHeight);
     }
 
-    public double getLocX() 
+    public int getLocX() 
     {
         return locX;
     }
     
-    public double getLocY() 
+    public int getLocY() 
     {
         return locY;
     }
@@ -94,20 +94,20 @@ public class Sprite
     
     
     public void updateSprite()
-    {
-//    	double radian = Math.toRadians(360 - angle);
-//    	// move at the x axis
-//        locX += speed * Math.cos(radian);
-//        if (locX >= pWidth + imageWidth)
-//        	locX = 0 - imageWidth;
-//        else if (locX < 0 - imageWidth)
-//        	locX = pWidth;
-//        // move at the y axis
-//        locY += speed * Math.sin(radian);
-//        if (locY >= pHeight)
-//        	locY = 0 - imageHeight;
-//        else if (locY < 0 - imageHeight)
-//        	locY = pHeight;
+    { 
+    	double radian = Math.toRadians(90);
+    	// move at the x axis
+        locX += speed * Math.cos(radian);
+        if (locX >= pWidth + imageWidth)
+        	locX = 0 - imageWidth;
+        else if (locX < 0 - imageWidth)
+        	locX = pWidth;
+        // move at the y axis
+        locY += speed * Math.sin(radian);
+        if (locY >= pHeight)
+        	locY = 0 - imageHeight;
+        else if (locY < 0 - imageHeight)
+        	locY = pHeight;
     }
     
     public void drawSprite(Graphics2D g)

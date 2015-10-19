@@ -25,7 +25,7 @@ public class GameEngine
 	private int score;
 	private SpaceshipSprite spaceship;
 	
-	//	private LinkedList<BulletSprite> bullets, deleteBullets;
+	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
 	//	private LinkedList<AsteroidSprite> asteroids, deleteAsteroids, addAsteroids;
 	private long lastShootTime;
 
@@ -41,10 +41,12 @@ public class GameEngine
 		score = 0;
 		win = lose = false;
 		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
-		System.out.println(width / 2 - 45);
+//		System.out.println(width / 2 - 45);
 		initializeStageOne();
-		//		bullets = new LinkedList<BulletSprite>();
-		//		deleteBullets = new LinkedList<BulletSprite>();
+		bullets = new LinkedList<BulletSprite>();
+		deleteBullets = new LinkedList<BulletSprite>();
+		enemyBullets = new LinkedList<BulletSprite>();
+		deleteEnemyBullets = new LinkedList<BulletSprite>();
 		//		asteroids = new LinkedList<AsteroidSprite>();
 		//		deleteAsteroids = new LinkedList<AsteroidSprite>();
 		//		addAsteroids = new LinkedList<AsteroidSprite>();
@@ -63,7 +65,9 @@ public class GameEngine
 		EnemyshipSprite enemy2;
 		for (int i =0; i < Settings.ENEMYINAROW; i++)
 		{
-			for (int j =0; j < Settings.ENEMYROWS; j++)
+			enemy2 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, 0*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship2.png");
+			myEnemies.add(enemy2);	
+			for (int j =1; j < Settings.ENEMYROWS; j++)
 			{
 				enemy2 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, j*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
 				myEnemies.add(enemy2);	
@@ -92,15 +96,17 @@ public class GameEngine
 
 		// draw game elements
 		spaceship.drawSprite(dbg);
-		//		for (BulletSprite bullet : bullets)
-		//			bullet.drawSprite(dbg);
+		for (BulletSprite bullet : bullets)
+				bullet.drawSprite(dbg);
 		//		for (AsteroidSprite asteroid : asteroids)
 		//			asteroid.drawSprite(dbg);
 		for (SpaceshipSprite EnemyshipSprite : myEnemies) {
 			if(EnemyshipSprite.getHp()>0)
 				EnemyshipSprite.drawSprite(dbg);
 		}
-		
+		for (BulletSprite bulletSprite : enemyBullets) {
+			bulletSprite.drawSprite(dbg);
+		}
 		
 		for (int i = 0, x = 10; i < numOfLives; ++i, x+=50)
 		{
@@ -110,6 +116,7 @@ public class GameEngine
 		dbg.setFont(new Font("Arial", Font.BOLD, 16));
 		dbg.setColor(Color.WHITE);
 		dbg.drawString("Score: " + score, width - 100, 30);
+		
 		
 		if (!gameStart)
 		{
@@ -137,24 +144,32 @@ public class GameEngine
 
 			removeBullets();
 
-			for (EnemyshipSprite enemyshipSprite : myEnemies) {
-				if(enemyshipSprite.fire())
-				{
-					// enemy ship fire!
-					System.out.println("enemy fire");
-				}
-			}
+			
 			
 			long now = System.currentTimeMillis();
 			if (now - lastShootTime > Settings.SHOT_THRESHOLD)
 			{
 				moveEnemyShips();
 				lastShootTime = now;
+				for (EnemyshipSprite enemyshipSprite : myEnemies) {
+					if(enemyshipSprite.fire())
+					{
+						// enemy ship fire!
+						enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX(), enemyshipSprite.getLocY(), width, height, 90));
+//						System.out.println("enemy fire");
+					}
+				}
 			}
 			
 			spaceship.updateSprite();
-			//			for (BulletSprite bullet : bullets)
-			//				bullet.updateSprite();
+			for (BulletSprite bullet : bullets)
+			{
+				bullet.updateSprite();
+						
+			}
+			for (BulletSprite bulletSprite : enemyBullets) {
+				bulletSprite.updateSprite();
+			}
 			//			for (AsteroidSprite asteroid : asteroids)
 			//				asteroid.updateSprite();
 		}
@@ -219,8 +234,9 @@ public class GameEngine
 			long now = System.currentTimeMillis();
 			if (now - lastShootTime > Settings.SHOT_THRESHOLD)
 			{
-				//				bullets.add(new BulletSprite(spaceship.locX, spaceship.locY, width, height, spaceship.angle));
+				bullets.add(new BulletSprite(spaceship.locX, spaceship.locY, width, height, 0));
 				lastShootTime = now;
+			
 			}
 		}
 	}
@@ -336,14 +352,22 @@ public class GameEngine
 
 	private void removeBullets()
 	{
-		//		deleteBullets.clear();
-		//		for (BulletSprite bullet : bullets)
-		//		{
-		//			if (bullet.getIsCollide() || bullet.getPassDistance())
-		//			{
-		//				deleteBullets.add(bullet);
-		//			}
-		//		}
-		//		bullets.removeAll(deleteBullets);
+				deleteBullets.clear();
+				for (BulletSprite bullet : bullets)
+				{
+					if (bullet.getIsCollide() || bullet.getPassDistance())
+					{
+						deleteBullets.add(bullet);
+					}
+				}
+				bullets.removeAll(deleteBullets);
+				for (BulletSprite bulletSprite : enemyBullets)
+				{
+					if (bulletSprite.getIsCollide() || bulletSprite.getPassDistance())
+					{
+						deleteEnemyBullets.add(bulletSprite);
+					}
+				}
+				enemyBullets.removeAll(deleteEnemyBullets);
 	}
 }
