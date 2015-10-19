@@ -1,4 +1,5 @@
 import java.awt.Graphics2D;
+import java.util.Random;
 
 
 public class EnemyshipSprite extends SpaceshipSprite{
@@ -17,6 +18,15 @@ public class EnemyshipSprite extends SpaceshipSprite{
     	if(!isDead)
     		g.drawImage(bImage, locX, locY, null);
     	
+    }
+    
+    public boolean fire()
+    {
+    	Random rand = new Random();
+    	int num = rand.nextInt(100);
+    	if(num > 80)
+    		return true;
+    	return false;
     }
 
 }

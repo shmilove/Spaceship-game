@@ -137,6 +137,14 @@ public class GameEngine
 
 			removeBullets();
 
+			for (EnemyshipSprite enemyshipSprite : myEnemies) {
+				if(enemyshipSprite.fire())
+				{
+					// enemy ship fire!
+					System.out.println("enemy fire");
+				}
+			}
+			
 			long now = System.currentTimeMillis();
 			if (now - lastShootTime > Settings.SHOT_THRESHOLD)
 			{
