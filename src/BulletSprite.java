@@ -8,17 +8,15 @@ import javax.imageio.ImageIO;
 
 public class BulletSprite extends Sprite 
 {
-	private double distance;
-	private boolean passDistance;
+	private boolean markForDelete;
 	
-	public BulletSprite(int x, int y, int w, int h, int angle) 
+	public BulletSprite(int x, int y, int w, int h, int speed, int angle, String imageName) 
 	{
-		super(x, y, w, h, Settings.BULLET_SPEED, angle,0);
-		distance = 0;
-		passDistance = false;
+		super(x, y, w, h, speed, angle,0);
+		markForDelete = false;
 		try 
 		{
-			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//bullet.png")));
+			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//" + imageName)));
 		} 
 		catch (IOException e) 
 		{
@@ -26,9 +24,9 @@ public class BulletSprite extends Sprite
 		}
 	}
 	
-	public boolean getPassDistance()
+	public boolean getMarkForDelete()
 	{
-		return passDistance;
+		return markForDelete;
 	}
 	
 	public void drawSprite(Graphics2D g)
@@ -47,12 +45,12 @@ public class BulletSprite extends Sprite
 	public void updateSprite()
     {
 		super.updateSprite();
-		
-		double radian = Math.toRadians(0);
-        distance += Math.sqrt(Math.pow(speed * Math.cos(radian), 2) + Math.pow(speed * Math.sin(radian), 2));
         
-        if (distance >= Settings.MAX_DISTANCE)
-        	passDistance = true;
+        if (locY <= 0)
+        	markForDelete = true;
+        
+        if (locY >= pHeight)
+        	markForDelete = true;
     }
 	
 	public Rectangle getBoundingBox()

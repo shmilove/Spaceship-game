@@ -24,58 +24,49 @@ public class GameEngine
 	private boolean win, lose;
 	private int score;
 	private SpaceshipSprite spaceship;
-	
+
 	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
 	//	private LinkedList<AsteroidSprite> asteroids, deleteAsteroids, addAsteroids;
 	private long lastShootTime;
+	private long moveTime;
 
 	public GameEngine(int pWidth, int pHeight)
 	{
 		width = pWidth;
 		height = pHeight;
 		lifeImage = Toolkit.getDefaultToolkit().getImage((new File(".")).getAbsolutePath() + "//life.png");
-		
+
 		rManager = new RibbonsManager(width, height);
 		gameStart = false;
 		myEnemies = new LinkedList<EnemyshipSprite>();
 		score = 0;
 		win = lose = false;
 		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
-//		System.out.println(width / 2 - 45);
+		//		System.out.println(width / 2 - 45);
 		initializeStageOne();
 		bullets = new LinkedList<BulletSprite>();
 		deleteBullets = new LinkedList<BulletSprite>();
 		enemyBullets = new LinkedList<BulletSprite>();
 		deleteEnemyBullets = new LinkedList<BulletSprite>();
-		//		asteroids = new LinkedList<AsteroidSprite>();
-		//		deleteAsteroids = new LinkedList<AsteroidSprite>();
-		//		addAsteroids = new LinkedList<AsteroidSprite>();
-
-		//		asteroids.add(new AsteroidSpriteLarge(10, 20, width, height));
-		//		asteroids.add(new AsteroidSpriteLarge(320, 20, width, height));
-		//		asteroids.add(new AsteroidSpriteLarge(10, 500, width, height));
-		//		asteroids.add(new AsteroidSpriteLarge(450, 500, width, height));
 		lastShootTime = System.currentTimeMillis();
+		moveTime = System.currentTimeMillis();
 
 		rManager.moveDown();
 	}
 
 	private void initializeStageOne()
 	{
-		EnemyshipSprite enemy2;
-		for (int i =0; i < Settings.ENEMYINAROW; i++)
+		EnemyshipSprite enemy;
+		for (int i =0; i < Settings.ENEMY_IN_A_ROW; i++)
 		{
-			
-			for (int j =0; j < Settings.ENEMYROWS; j++)
+			for (int j =0; j < Settings.ENEMY_ROWS; j++)
 			{
-				enemy2 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, j*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 90, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
-				myEnemies.add(enemy2);	
+				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, Settings.HERO_HP, Settings.HERO_SPEED, "enemy3.png");
+				myEnemies.add(enemy);	
 			}
-			
 		}
-		
-		
 	}
+
 	public boolean isGameOver()
 	{
 		return win || lose;
@@ -96,17 +87,19 @@ public class GameEngine
 		// draw game elements
 		spaceship.drawSprite(dbg);
 		for (BulletSprite bullet : bullets)
-				bullet.drawSprite(dbg);
+			bullet.drawSprite(dbg);
 		//		for (AsteroidSprite asteroid : asteroids)
 		//			asteroid.drawSprite(dbg);
-		for (SpaceshipSprite EnemyshipSprite : myEnemies) {
-			if(EnemyshipSprite.getHp()>0)
+		for (SpaceshipSprite EnemyshipSprite : myEnemies) 
+		{
+			if(EnemyshipSprite.getHp() > 0)
 				EnemyshipSprite.drawSprite(dbg);
 		}
-		for (BulletSprite bulletSprite : enemyBullets) {
+		for (BulletSprite bulletSprite : enemyBullets) 
+		{
 			bulletSprite.drawSprite(dbg);
 		}
-		
+
 		for (int i = 0, x = 10; i < numOfLives; ++i, x+=50)
 		{
 			dbg.drawImage(lifeImage, x, 10, null);
@@ -115,8 +108,8 @@ public class GameEngine
 		dbg.setFont(new Font("Arial", Font.BOLD, 16));
 		dbg.setColor(Color.WHITE);
 		dbg.drawString("Score: " + score, width - 100, 30);
-		
-		
+
+
 		if (!gameStart)
 		{
 			drawInstructions(dbg);
@@ -143,59 +136,56 @@ public class GameEngine
 
 			removeBullets();
 
-			
-			
+
+
 			long now = System.currentTimeMillis();
-			if (now - lastShootTime > Settings.SHOT_THRESHOLD)
+			if (now - moveTime > Settings.MOVE_THRESHOLD)
 			{
 				moveEnemyShips();
-				lastShootTime = now;
-				for (EnemyshipSprite enemyshipSprite : myEnemies) {
+				moveTime = now;
+				for (EnemyshipSprite enemyshipSprite : myEnemies) 
+				{
 					if(enemyshipSprite.fire())
 					{
-						// enemy ship fire!
-						enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX(), enemyshipSprite.getLocY(), width, height, 90));
-//						System.out.println("enemy fire");
+						enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY1_BULLET_SPEED, 180, "EnemyBullet.png"));
 					}
 				}
 			}
-			
+
 			spaceship.updateSprite();
 			for (BulletSprite bullet : bullets)
 			{
 				bullet.updateSprite();
-						
+
 			}
 			for (BulletSprite bulletSprite : enemyBullets) {
 				bulletSprite.updateSprite();
 			}
-			//			for (AsteroidSprite asteroid : asteroids)
-			//				asteroid.updateSprite();
 		}
 
 	}
-	
+
 	private void moveEnemyShips()
 	{
 		if(myEnemies.getFirst().getLocX()>0 && moveLeft)
 		{
-			for (SpaceshipSprite spaceshipSprite : myEnemies) {		
-					spaceshipSprite.moveLeft();
-				}
-			if(myEnemies.getLast().getLocX() <= 479)
+			for (SpaceshipSprite spaceshipSprite : myEnemies) 
+			{		
+				spaceshipSprite.moveLeft();
+			}
+			if(myEnemies.getFirst().getLocX() <= 0)
 				moveLeft = false;
 		}
 		if(!moveLeft)
 		{
-			
 			for (SpaceshipSprite spaceshipSprite : myEnemies) {
 				spaceshipSprite.moveRight();
 			}
 		}
-		if(myEnemies.getLast().getLocX() == 563)
+		if(myEnemies.getLast().getLocX() >= width - myEnemies.getLast().getImageWidth() - 5)
+		{
 			moveLeft = true;
-		
-		
+		}
 	}
 
 	public void leftKeyClicked()
@@ -215,7 +205,7 @@ public class GameEngine
 		if (gameStart)
 			spaceship.moveUp();
 	}
-	
+
 	public void downKeyClicked()
 	{
 		if (gameStart)
@@ -224,25 +214,19 @@ public class GameEngine
 
 	public void spaceKeyClicked()
 	{
+		long now = System.currentTimeMillis();
 		if (!gameStart)
 		{
 			gameStart = true;
 		}
 		else
 		{
-			long now = System.currentTimeMillis();
 			if (now - lastShootTime > Settings.SHOT_THRESHOLD)
 			{
-				bullets.add(new BulletSprite(spaceship.locX, spaceship.locY, width, height, 0));
+				bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png"));
 				lastShootTime = now;
-			
 			}
 		}
-	}
-
-	public void upKeyReleased()
-	{
-//		spaceship.stop();
 	}
 
 	private boolean checkCollisions()
@@ -351,22 +335,22 @@ public class GameEngine
 
 	private void removeBullets()
 	{
-				deleteBullets.clear();
-				for (BulletSprite bullet : bullets)
-				{
-					if (bullet.getIsCollide() || bullet.getPassDistance())
-					{
-						deleteBullets.add(bullet);
-					}
-				}
-				bullets.removeAll(deleteBullets);
-				for (BulletSprite bulletSprite : enemyBullets)
-				{
-					if (bulletSprite.getIsCollide() || bulletSprite.getPassDistance())
-					{
-						deleteEnemyBullets.add(bulletSprite);
-					}
-				}
-				enemyBullets.removeAll(deleteEnemyBullets);
+		deleteBullets.clear();
+		for (BulletSprite bullet : bullets)
+		{
+			if (bullet.getIsCollide() || bullet.getMarkForDelete())
+			{
+				deleteBullets.add(bullet);
+			}
+		}
+		bullets.removeAll(deleteBullets);
+		for (BulletSprite bulletSprite : enemyBullets)
+		{
+			if (bulletSprite.getIsCollide() || bulletSprite.getMarkForDelete())
+			{
+				deleteEnemyBullets.add(bulletSprite);
+			}
+		}
+		enemyBullets.removeAll(deleteEnemyBullets);
 	}
 }

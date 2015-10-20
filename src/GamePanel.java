@@ -124,10 +124,6 @@ public class GamePanel extends JPanel implements Runnable
 		public void keyReleased(KeyEvent e) 
 		{
 			keys[e.getKeyCode()] = false;
-			if (e.getKeyCode() == KeyEvent.VK_UP)
-			{
-				game.upKeyReleased();
-			}
 		}
 
 		public void keyTyped(KeyEvent e) 
