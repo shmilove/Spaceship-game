@@ -2,10 +2,8 @@ import java.awt.Graphics2D;
 import java.util.Random;
 
 
-public class EnemyshipSprite extends SpaceshipSprite{
-
-	private boolean isDead = false;
-	
+public class EnemyshipSprite extends SpaceshipSprite
+{
 	public EnemyshipSprite(int x, int y, int w, int h, int angle, int hp, int speed, String imgName) 
 	{
 		super(x, y, w, h, angle, hp, speed, imgName);

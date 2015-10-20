@@ -10,6 +10,8 @@ public class CollisionDetection
 		double height1 = y1 + image1.getHeight() -1;
 		double width2 = x2 + image2.getWidth() -1;
 		double height2 = y2 + image2.getHeight() -1;
+		
+		System.out.println(image1.getWidth());
 
 		int xstart = (int) Math.max(x1, x2);
 		int ystart = (int) Math.max(y1, y2);

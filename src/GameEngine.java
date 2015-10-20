@@ -20,7 +20,7 @@ public class GameEngine
 	private Image lifeImage;
 	private RibbonsManager rManager;
 	private boolean gameStart , moveLeft = true;
-	private LinkedList<EnemyshipSprite> myEnemies;
+	private LinkedList<EnemyshipSprite> enemyShips, deleteEnemyShips;
 	private boolean win, lose;
 	private int score;
 	private SpaceshipSprite spaceship;
@@ -38,11 +38,11 @@ public class GameEngine
 
 		rManager = new RibbonsManager(width, height);
 		gameStart = false;
-		myEnemies = new LinkedList<EnemyshipSprite>();
+		enemyShips = new LinkedList<EnemyshipSprite>();
+		deleteEnemyShips = new LinkedList<EnemyshipSprite>();
 		score = 0;
 		win = lose = false;
-		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
-		//		System.out.println(width / 2 - 45);
+		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship1.png");
 		initializeStageOne();
 		bullets = new LinkedList<BulletSprite>();
 		deleteBullets = new LinkedList<BulletSprite>();
@@ -61,8 +61,8 @@ public class GameEngine
 		{
 			for (int j =0; j < Settings.ENEMY_ROWS; j++)
 			{
-				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, Settings.HERO_HP, Settings.HERO_SPEED, "enemy3.png");
-				myEnemies.add(enemy);	
+				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, Settings.HERO_HP, Settings.HERO_SPEED, "enemySpaceship.png");
+				enemyShips.add(enemy);	
 			}
 		}
 	}
@@ -90,7 +90,7 @@ public class GameEngine
 			bullet.drawSprite(dbg);
 		//		for (AsteroidSprite asteroid : asteroids)
 		//			asteroid.drawSprite(dbg);
-		for (SpaceshipSprite EnemyshipSprite : myEnemies) 
+		for (SpaceshipSprite EnemyshipSprite : enemyShips) 
 		{
 			if(EnemyshipSprite.getHp() > 0)
 				EnemyshipSprite.drawSprite(dbg);
@@ -109,7 +109,6 @@ public class GameEngine
 		dbg.setColor(Color.WHITE);
 		dbg.drawString("Score: " + score, width - 100, 30);
 
-
 		if (!gameStart)
 		{
 			drawInstructions(dbg);
@@ -125,8 +124,8 @@ public class GameEngine
 
 	public void updateGame()
 	{
-		//		if (asteroids.isEmpty())
-		//			win = true;
+		if (enemyShips.isEmpty())
+			win = true;
 		rManager.update();
 
 		if (gameStart)
@@ -135,15 +134,14 @@ public class GameEngine
 				doCollisionLogic();
 
 			removeBullets();
-
-
+			removeEnemies();
 
 			long now = System.currentTimeMillis();
 			if (now - moveTime > Settings.MOVE_THRESHOLD)
 			{
 				moveEnemyShips();
 				moveTime = now;
-				for (EnemyshipSprite enemyshipSprite : myEnemies) 
+				for (EnemyshipSprite enemyshipSprite : enemyShips) 
 				{
 					if(enemyshipSprite.fire())
 					{
@@ -167,22 +165,22 @@ public class GameEngine
 
 	private void moveEnemyShips()
 	{
-		if(myEnemies.getFirst().getLocX()>0 && moveLeft)
+		if(enemyShips.getFirst().getLocX()>0 && moveLeft)
 		{
-			for (SpaceshipSprite spaceshipSprite : myEnemies) 
+			for (SpaceshipSprite spaceshipSprite : enemyShips) 
 			{		
 				spaceshipSprite.moveLeft();
 			}
-			if(myEnemies.getFirst().getLocX() <= 0)
+			if(enemyShips.getFirst().getLocX() <= 0)
 				moveLeft = false;
 		}
 		if(!moveLeft)
 		{
-			for (SpaceshipSprite spaceshipSprite : myEnemies) {
+			for (SpaceshipSprite spaceshipSprite : enemyShips) {
 				spaceshipSprite.moveRight();
 			}
 		}
-		if(myEnemies.getLast().getLocX() >= width - myEnemies.getLast().getImageWidth() - 5)
+		if(enemyShips.getLast().getLocX() >= width - enemyShips.getLast().getImageWidth() - 5)
 		{
 			moveLeft = true;
 		}
@@ -233,34 +231,48 @@ public class GameEngine
 	{
 		boolean collision = false;
 
-		//		for (AsteroidSprite asteroid : asteroids)
-		//		{
-		//			// check collision with spaceship
-		//			if (!asteroid.getIsCollide() && CollisionDetection.isRectangleCollide(asteroid.getBoundingBox(), spaceship.getBoundingBox()))
-		//			{
-		//				if (CollisionDetection.isPixelCollide((int)asteroid.locX, (int)asteroid.locY, asteroid.bImage, (int)spaceship.locX-(spaceship.imageWidth/2), (int)spaceship.locY-(spaceship.imageHeight/2), spaceship.bImage))
-		//				{
-		//					spaceship.setIsCollide();
-		//					asteroid.setIsCollide();
-		//					collision = true;
-		//				}
-		//			}
-		//
-		//			// check collision with bullets
-		//			for (BulletSprite bullet : bullets)
-		//			{
-		//				if (!asteroid.getIsCollide() && !bullet.getIsCollide() && CollisionDetection.isRectangleCollide(asteroid.getBoundingBox(), bullet.getBoundingBox()))
-		//				{
-		//					if (CollisionDetection.isPixelCollide((int)asteroid.locX, (int)asteroid.locY, asteroid.bImage, (int)bullet.locX-(bullet.imageWidth/2), (int)bullet.locY-(bullet.imageHeight/2), bullet.bImage))
-		//					{
-		//						bullet.setIsCollide();
-		//						asteroid.setIsCollide();
-		//						collision = true;
-		//					}
-		//				}
-		//			}
-		//		}
-		//
+		for (EnemyshipSprite enemy : enemyShips)
+		{
+			// check collision with spaceship
+			if (!enemy.getIsCollide() && CollisionDetection.isRectangleCollide(enemy.getBoundingBox(), spaceship.getBoundingBox()))
+			{
+				if (CollisionDetection.isPixelCollide((int)enemy.locX, (int)enemy.locY, enemy.bImage, (int)spaceship.locX, (int)spaceship.locY, spaceship.bImage))
+				{
+					spaceship.setIsCollide();
+					enemy.gotHit(1);
+					collision = true;
+				}
+			}
+
+			// check collision with bullets
+			for (BulletSprite bullet : bullets)
+			{
+				if (!enemy.getIsCollide() && !bullet.getIsCollide() && CollisionDetection.isRectangleCollide(enemy.getBoundingBox(), bullet.getBoundingBox()))
+				{
+					if (CollisionDetection.isPixelCollide((int)enemy.locX, (int)enemy.locY, enemy.bImage, (int)bullet.locX-(bullet.imageWidth/2), (int)bullet.locY-(bullet.imageHeight/2), bullet.bImage))
+					{
+						bullet.setIsCollide();
+						enemy.gotHit(1);
+						collision = true;
+					}
+				}
+			}
+		}
+		for (BulletSprite bullet : enemyBullets)
+		{
+			// check collision with spaceship
+			if (!bullet.getIsCollide() && CollisionDetection.isRectangleCollide(bullet.getBoundingBox(), spaceship.getBoundingBox()))
+			{
+				if (CollisionDetection.isPixelCollide((int)bullet.locX, (int)bullet.locY, bullet.bImage, (int)spaceship.locX, (int)spaceship.locY, spaceship.bImage))
+				{
+					spaceship.setIsCollide();
+					bullet.setIsCollide();
+					collision = true;
+				}
+			}
+		}
+		
+
 		return collision;
 	}
 
@@ -310,15 +322,15 @@ public class GameEngine
 		//		addAsteroids.clear();
 		if (spaceship.getIsCollide())
 		{
-			//			numOfLives--;
-			//			if (numOfLives > 0)
-			//			{
-			//				spaceship = new SpaceshipSprite(width / 2, height / 2, width, height);
-			//			}
-			//			else
-			//			{
-			//				lose = true;
-			//			}
+//			numOfLives--;
+//			if (numOfLives > 0)
+//			{
+				spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship1.png");
+//			}
+//			else
+//			{
+//				lose = true;
+//			}
 		}
 		//		for (AsteroidSprite asteroid : asteroids)
 		//		{
@@ -352,5 +364,18 @@ public class GameEngine
 			}
 		}
 		enemyBullets.removeAll(deleteEnemyBullets);
+	}
+	
+	private void removeEnemies()
+	{
+		deleteEnemyShips.clear();
+		for (EnemyshipSprite enemy: enemyShips)
+		{
+			if (enemy.getIsCollide() || enemy.getIsDead())
+			{
+				deleteEnemyShips.add(enemy);
+			}
+		}
+		enemyShips.removeAll(deleteEnemyShips);
 	}
 }

@@ -51,24 +51,6 @@ public class SpaceshipSprite extends Sprite
 			locY = pHeight - imageHeight - 35;
 	}
 	
-//	public void turnLeft()
-//	{
-//		angle += Settings.ROTATION_SPEED;
-//	}
-//	
-//	public void turnRight()
-//	{
-//		angle -= Settings.ROTATION_SPEED;
-//	}
-	
-//	public void speedUp()
-//	{
-//		if (speed >= Settings.MAX_SPEED)
-//			speed = Settings.MAX_SPEED;
-//		else
-//			speed += Settings.SPEED_INCREASE_RATE;
-//	}
-	
 	public void stop()
 	{
 		speed = 0;
@@ -76,25 +58,21 @@ public class SpaceshipSprite extends Sprite
 	
     public void drawSprite(Graphics2D g)
     {
-//    	AffineTransform oldtrans = g.getTransform();
-//	    AffineTransform trans = new AffineTransform();
-//
-//	    trans.setToIdentity();
-//	    trans.rotate(Math.toRadians(90 - angle), locX, locY);
-//	    trans.translate(locX-(imageWidth/2), locY-(imageHeight/2));
-//	    g.setTransform(trans);
 	    g.drawImage(bImage, locX, locY, null);
-//	    trans.setToIdentity();
-//	    g.setTransform(oldtrans);
     }
-    public void hasMoreHp(int damage)
+    
+    public void gotHit(int damage)
     {
-    	hp = hp - damage;
-    	
+    	hp--;
     	if(hp <= 0)
     		isDead = true;
-    	
     }
+    
+    public boolean getIsDead()
+    {
+    	return isDead;
+    }
+    
     public void updateSprite()
     {
     	

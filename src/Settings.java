@@ -13,13 +13,13 @@ public class Settings
 	public static final int MOVE_THRESHOLD = 150;
 	
 	// Enemy 1 Ships
-	public static final int ENEMY1_BULLET_SPEED = 3;
-	public static final int ENEMY1_WIDTH = 60;
+	public static final int ENEMY1_BULLET_SPEED = 1;
+	public static final int ENEMY1_WIDTH = 80;
 	public static final int ENEMY1_HEIGHT = 50;
 	public static final int ENEMY1_WIDTH_SPACE = 30;
 	public static final int ENEMY1_HEIGHT_SPACE = 50;
 	public static final int ENEMY_ROWS = 4;
-	public static final int ENEMY_IN_A_ROW = 9;
+	public static final int ENEMY_IN_A_ROW = 7;
 	
 	// Spaceship
 	public static final int ROTATION_SPEED = 5;
