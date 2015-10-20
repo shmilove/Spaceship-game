@@ -65,11 +65,10 @@ public class GameEngine
 		EnemyshipSprite enemy2;
 		for (int i =0; i < Settings.ENEMYINAROW; i++)
 		{
-			enemy2 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, 0*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship2.png");
-			myEnemies.add(enemy2);	
-			for (int j =1; j < Settings.ENEMYROWS; j++)
+			
+			for (int j =0; j < Settings.ENEMYROWS; j++)
 			{
-				enemy2 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, j*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
+				enemy2 = new EnemyshipSprite(i*Settings.ENEMY1WIDTH + Settings.ENEMY1WIDTHSPACE, j*Settings.ENEMY1HIGHT + Settings.ENEMY1HIGHTSPACE, width, height, 90, Settings.HERO_HP, Settings.HERO_SPEED, "enemy.png");
 				myEnemies.add(enemy2);	
 			}
 			
@@ -183,12 +182,12 @@ public class GameEngine
 			for (SpaceshipSprite spaceshipSprite : myEnemies) {		
 					spaceshipSprite.moveLeft();
 				}
-			
-			if(myEnemies.getLast().getLocX() <= 447)
+			if(myEnemies.getLast().getLocX() <= 479)
 				moveLeft = false;
 		}
 		if(!moveLeft)
 		{
+			
 			for (SpaceshipSprite spaceshipSprite : myEnemies) {
 				spaceshipSprite.moveRight();
 			}

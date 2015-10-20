@@ -11,12 +11,12 @@ public class Settings
 	
 	
 	//enemy1 ship
-	public static final int ENEMY1WIDTH = 32;
+	public static final int ENEMY1WIDTH = 40;
 	public static final int ENEMY1HIGHT = 42;
 	public static final int ENEMY1WIDTHSPACE = 50;
 	public static final int ENEMY1HIGHTSPACE = 50;
 	public static final int ENEMYROWS = 4;
-	public static final int ENEMYINAROW = 15;
+	public static final int ENEMYINAROW = 13;
 	
 	// Spaceship
 	public static final int ROTATION_SPEED = 5;

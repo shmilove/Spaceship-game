@@ -35,7 +35,6 @@ public class BulletSprite extends Sprite
     {
 		AffineTransform oldtrans = g.getTransform();
 	    AffineTransform trans = new AffineTransform();
-
 	    trans.setToIdentity();
 	    trans.rotate(Math.toRadians(angle), locX, locY);
 	    trans.translate(locX-(imageWidth/2), locY-(imageHeight/2));
@@ -49,7 +48,7 @@ public class BulletSprite extends Sprite
     {
 		super.updateSprite();
 		
-		double radian = Math.toRadians(360 - angle);
+		double radian = Math.toRadians(0);
         distance += Math.sqrt(Math.pow(speed * Math.cos(radian), 2) + Math.pow(speed * Math.sin(radian), 2));
         
         if (distance >= Settings.MAX_DISTANCE)

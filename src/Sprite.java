@@ -95,7 +95,7 @@ public class Sprite
     
     public void updateSprite()
     { 
-    	double radian = Math.toRadians(90);
+    	double radian = Math.toRadians(270-angle);
     	// move at the x axis
         locX += speed * Math.cos(radian);
         if (locX >= pWidth + imageWidth)
