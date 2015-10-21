@@ -55,6 +55,6 @@ public class BulletSprite extends Sprite
 	
 	public Rectangle getBoundingBox()
     {
-        return new Rectangle((int)locX-(imageWidth/2), (int)locY-(imageHeight/2), imageWidth, imageHeight);
+        return new Rectangle((int)locX - imageWidth/2, (int)locY - imageHeight/2, imageWidth, imageHeight);
     }
 }

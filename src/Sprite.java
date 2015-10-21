@@ -46,7 +46,7 @@ public class Sprite
     
     public Rectangle getBoundingBox()
     {
-        return new Rectangle((int)getLocX(), (int)getLocY(), imageWidth, imageHeight);
+        return new Rectangle((int)locX, (int)locY, imageWidth, imageHeight);
     }
 
     public int getLocX() 

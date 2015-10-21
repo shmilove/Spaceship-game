@@ -42,7 +42,7 @@ public class GameEngine
 		deleteEnemyShips = new LinkedList<EnemyshipSprite>();
 		score = 0;
 		win = lose = false;
-		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship1.png");
+		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
 		initializeStageOne();
 		bullets = new LinkedList<BulletSprite>();
 		deleteBullets = new LinkedList<BulletSprite>();
@@ -249,7 +249,7 @@ public class GameEngine
 			{
 				if (!enemy.getIsCollide() && !bullet.getIsCollide() && CollisionDetection.isRectangleCollide(enemy.getBoundingBox(), bullet.getBoundingBox()))
 				{
-					if (CollisionDetection.isPixelCollide((int)enemy.locX, (int)enemy.locY, enemy.bImage, (int)bullet.locX-(bullet.imageWidth/2), (int)bullet.locY-(bullet.imageHeight/2), bullet.bImage))
+					if (CollisionDetection.isPixelCollide((int)enemy.locX, (int)enemy.locY, enemy.bImage, (int)bullet.locX, (int)bullet.locY, bullet.bImage))
 					{
 						bullet.setIsCollide();
 						enemy.gotHit(1);
@@ -325,7 +325,7 @@ public class GameEngine
 //			numOfLives--;
 //			if (numOfLives > 0)
 //			{
-				spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship1.png");
+				spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
 //			}
 //			else
 //			{
