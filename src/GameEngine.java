@@ -322,15 +322,15 @@ public class GameEngine
 		//		addAsteroids.clear();
 		if (spaceship.getIsCollide())
 		{
-//			numOfLives--;
-//			if (numOfLives > 0)
-//			{
+			numOfLives--;
+			if (numOfLives > 0)
+			{
 				spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
-//			}
-//			else
-//			{
-//				lose = true;
-//			}
+			}
+			else
+			{
+				lose = true;
+			}
 		}
 		//		for (AsteroidSprite asteroid : asteroids)
 		//		{
