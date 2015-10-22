@@ -21,7 +21,8 @@ public class GameEngine
 	private RibbonsManager rManager;
 	private boolean gameStart , moveLeft = true;
 	private LinkedList<EnemyshipSprite> enemyShips, deleteEnemyShips;
-	private boolean win, lose;
+	private boolean win, lose, startStage1, startStage2, startBoss;
+	private boolean endStage1, endStage2;
 	private int score;
 	private SpaceshipSprite spaceship;
 
@@ -29,6 +30,7 @@ public class GameEngine
 	//	private LinkedList<AsteroidSprite> asteroids, deleteAsteroids, addAsteroids;
 	private long lastShootTime;
 	private long moveTime;
+	private long heroCreatedTime;
 
 	public GameEngine(int pWidth, int pHeight)
 	{
@@ -41,15 +43,16 @@ public class GameEngine
 		enemyShips = new LinkedList<EnemyshipSprite>();
 		deleteEnemyShips = new LinkedList<EnemyshipSprite>();
 		score = 0;
-		win = lose = false;
+		win = lose = startStage2 = startBoss = endStage1 = endStage2 = false;
 		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
-		initializeStageOne();
 		bullets = new LinkedList<BulletSprite>();
 		deleteBullets = new LinkedList<BulletSprite>();
 		enemyBullets = new LinkedList<BulletSprite>();
 		deleteEnemyBullets = new LinkedList<BulletSprite>();
 		lastShootTime = System.currentTimeMillis();
 		moveTime = System.currentTimeMillis();
+		heroCreatedTime = System.currentTimeMillis();
+		startStage1 = true;
 
 		rManager.moveDown();
 	}
@@ -61,7 +64,20 @@ public class GameEngine
 		{
 			for (int j =0; j < Settings.ENEMY_ROWS; j++)
 			{
-				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, Settings.HERO_HP, Settings.HERO_SPEED, "enemySpaceship.png");
+				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, Settings.ENEMY1_HP, Settings.ENEMY1_SPEED, "enemySpaceship.png");
+				enemyShips.add(enemy);	
+			}
+		}
+	}
+
+	private void initializeStageTwo()
+	{
+		EnemyshipSprite enemy;
+		for (int i =0; i < Settings.ENEMY_IN_A_ROW; i++)
+		{
+			for (int j =0; j < Settings.ENEMY_ROWS; j++)
+			{
+				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, 3, 6, "enemySpaceship.png");
 				enemyShips.add(enemy);	
 			}
 		}
@@ -124,12 +140,43 @@ public class GameEngine
 
 	public void updateGame()
 	{
-		if (enemyShips.isEmpty())
-			win = true;
+
 		rManager.update();
 
 		if (gameStart)
 		{
+			if (startStage1)
+			{
+				initializeStageOne();
+				startStage1 = false;
+			}
+
+			if (startStage2)
+			{
+				initializeStageTwo();
+				startStage2 = false;
+			}
+
+
+			if (enemyShips.isEmpty())
+			{
+				if (!endStage1)
+				{
+					endStage1 = true;
+					startStage2 = true;
+				}
+				else if (!endStage2)
+				{
+					endStage2 = true;
+					startBoss = true;
+				}
+				else
+				{
+					win = true;
+				}
+			}
+
+
 			if (checkCollisions())
 				doCollisionLogic();
 
@@ -148,7 +195,7 @@ public class GameEngine
 					}
 				}
 			}
-			
+
 			removeEnemies();
 
 			spaceship.updateSprite();
@@ -166,24 +213,27 @@ public class GameEngine
 
 	private void moveEnemyShips()
 	{
-		if(enemyShips.getFirst().getLocX()>0 && moveLeft)
+		if (!enemyShips.isEmpty())
 		{
-			for (SpaceshipSprite spaceshipSprite : enemyShips) 
-			{		
-				spaceshipSprite.moveLeft();
+			if(enemyShips.getFirst().getLocX()>0 && moveLeft)
+			{
+				for (SpaceshipSprite spaceshipSprite : enemyShips) 
+				{		
+					spaceshipSprite.moveLeft();
+				}
+				if(enemyShips.getFirst().getLocX() <= 0)
+					moveLeft = false;
 			}
-			if(enemyShips.getFirst().getLocX() <= 0)
-				moveLeft = false;
-		}
-		if(!moveLeft)
-		{
-			for (SpaceshipSprite spaceshipSprite : enemyShips) {
-				spaceshipSprite.moveRight();
+			if(!moveLeft)
+			{
+				for (SpaceshipSprite spaceshipSprite : enemyShips) {
+					spaceshipSprite.moveRight();
+				}
 			}
-		}
-		if(enemyShips.getLast().getLocX() >= width - enemyShips.getLast().getImageWidth() - 5)
-		{
-			moveLeft = true;
+			if(enemyShips.getLast().getLocX() >= width - enemyShips.getLast().getImageWidth() - 5)
+			{
+				moveLeft = true;
+			}
 		}
 	}
 
@@ -259,10 +309,14 @@ public class GameEngine
 				}
 			}
 		}
+		boolean isInvulnerable = false;
+		long now = System.currentTimeMillis();
+		if (now - heroCreatedTime < Settings.INVULNERABLE)
+			isInvulnerable = true;
 		for (BulletSprite bullet : enemyBullets)
 		{
 			// check collision with spaceship
-			if (!bullet.getIsCollide() && CollisionDetection.isRectangleCollide(bullet.getBoundingBox(), spaceship.getBoundingBox()))
+			if (!isInvulnerable && !bullet.getIsCollide() && CollisionDetection.isRectangleCollide(bullet.getBoundingBox(), spaceship.getBoundingBox()))
 			{
 				if (CollisionDetection.isPixelCollide((int)bullet.locX, (int)bullet.locY, bullet.bImage, (int)spaceship.locX, (int)spaceship.locY, spaceship.bImage))
 				{
@@ -272,7 +326,7 @@ public class GameEngine
 				}
 			}
 		}
-		
+
 
 		return collision;
 	}
@@ -281,13 +335,13 @@ public class GameEngine
 	{
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 34));
-		g.drawString("Welcome to BLABLABLA Game!", width/2 - 260, 100);
+		g.drawString("Welcome to SW Invaders Game!", width/2 - 260, 100);
 		g.setFont(new Font("Arial", Font.PLAIN, 26));
 		g.drawString("Your mission is to destroy all your enemies", width/2 - 240, 160);
 		g.drawString("this is a very dangerous mission, please be", width/2 - 240, 190);
 		g.drawString("careful - try to dodge enemy attacks and try", width/2 - 240, 220);
 		g.drawString("to kill them as soon as possible.", width/2 - 170, 250);
-		g.drawString("collect weapon improvemnts - it will help!", width/2 - 240, 280);
+		g.drawString("when hitted - you are invulnerable for second", width/2 - 250, 280);
 		g.drawString("Please use the following keys:", width/2 - 240, 370);
 		g.drawString("Arrow keys - move your spaceship", width/2 - 240, 430);
 		g.drawString("Space - shoot your enemies", width/2 - 240, 460);
@@ -327,6 +381,7 @@ public class GameEngine
 			if (numOfLives > 0)
 			{
 				spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
+				heroCreatedTime = System.currentTimeMillis();
 			}
 			else
 			{
@@ -366,7 +421,7 @@ public class GameEngine
 		}
 		enemyBullets.removeAll(deleteEnemyBullets);
 	}
-	
+
 	private void removeEnemies()
 	{
 		deleteEnemyShips.clear();
