@@ -340,7 +340,7 @@ public class GameEngine
 	{
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 34));
-		g.drawString("Welcome to SW Invaders Game!", width/2 - 260, 100);
+		g.drawString("Welcome to Space Invaders!", width/2 - 230, 100);
 		g.setFont(new Font("Arial", Font.PLAIN, 26));
 		g.drawString("Your mission is to destroy all your enemies", width/2 - 240, 160);
 		g.drawString("this is a very dangerous mission, please be", width/2 - 240, 190);
