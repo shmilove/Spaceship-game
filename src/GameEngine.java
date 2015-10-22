@@ -150,11 +150,16 @@ public class GameEngine
 				initializeStageOne();
 				startStage1 = false;
 			}
-
+			
 			if (startStage2)
 			{
 				initializeStageTwo();
 				startStage2 = false;
+			}
+			
+			if (startBoss)
+			{
+				
 			}
 
 
