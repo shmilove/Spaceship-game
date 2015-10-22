@@ -134,7 +134,6 @@ public class GameEngine
 				doCollisionLogic();
 
 			removeBullets();
-			removeEnemies();
 
 			long now = System.currentTimeMillis();
 			if (now - moveTime > Settings.MOVE_THRESHOLD)
@@ -149,6 +148,8 @@ public class GameEngine
 					}
 				}
 			}
+			
+			removeEnemies();
 
 			spaceship.updateSprite();
 			for (BulletSprite bullet : bullets)
