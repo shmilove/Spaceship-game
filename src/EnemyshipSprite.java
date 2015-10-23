@@ -5,9 +5,21 @@ import java.util.Random;
 
 public class EnemyshipSprite extends SpaceshipSprite
 {
-	public EnemyshipSprite(int x, int y, int w, int h, int angle, int hp, int speed, String imgName) 
+	private enum  Stages{ defult, stage_one, stage_two };
+	
+	public EnemyshipSprite(int x, int y, int w, int h, int stage,String imgName) 
 	{
-		super(x, y, w, h, angle, hp, speed, imgName);
+		super(x, y, w, h, 90, 1,0,imgName);
+		switch (stage) {
+		case 1:
+			stageOne();
+			break;
+
+		case 2:
+			stageTwo();
+			break;
+		
+		}
 	}
 
     public void drawSprite(Graphics2D g)
@@ -19,6 +31,19 @@ public class EnemyshipSprite extends SpaceshipSprite
     { 
     
     }
+    private void stageOne()
+    {
+    	angle = 90;
+     	hp = Settings.HP_ENEMY_ONE;
+     	speed = Settings.ENEMY1_SPEED;
+    }
+    private void stageTwo()
+    {
+    	angle =90;
+    	hp = Settings.HP_ENEMY_TWO;
+    	speed = Settings.ENEMY1_SPEED*2;
+    }
+    
     
     public boolean fire()
     {

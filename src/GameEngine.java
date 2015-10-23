@@ -37,7 +37,6 @@ public class GameEngine
 	private long lastShootTime;
 	private long moveTime;
 	private long heroCreatedTime;
-
 	public GameEngine(int pWidth, int pHeight)
 	{
 		
@@ -72,7 +71,7 @@ public class GameEngine
 		{
 			for (int j =0; j < Settings.ENEMY_ROWS; j++)
 			{
-				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, Settings.ENEMY1_HP, Settings.ENEMY1_SPEED, "enemySpaceship.png");
+				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height,1 , "enemySpaceship.png");
 				enemyShips.add(enemy);	
 			}
 		}
@@ -86,7 +85,7 @@ public class GameEngine
 		{
 			for (int j =0; j < Settings.ENEMY_ROWS; j++)
 			{
-				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, 3, 6, "enemySpaceship.png");
+				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 2, "enemySpaceship.png");
 				enemyShips.add(enemy);	
 			}
 		}	
