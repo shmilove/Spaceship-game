@@ -109,6 +109,12 @@ public class GameEngine
 
 		rManager.display(dbg);
 
+		if (!gameStart)
+		{
+			drawInstructions(dbg);
+			return dbImg;
+		}
+		
 		// draw game elements
 		spaceship.drawSprite(dbg);
 		for (BulletSprite bullet : bullets)
@@ -133,11 +139,6 @@ public class GameEngine
 		dbg.setFont(new Font("Arial", Font.BOLD, 16));
 		dbg.setColor(Color.WHITE);
 		dbg.drawString("Score: " + score, width - 100, 30);
-
-		if (!gameStart)
-		{
-			drawInstructions(dbg);
-		}
 
 		if (win || lose)
 		{
@@ -367,7 +368,7 @@ public class GameEngine
 //		g.drawString("Press space when you are ready...", width/2 - 220, 630);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image welcomeScreen = toolkit.getImage("./welcomeScreen.png");
-		g.drawImage(welcomeScreen, 0, 0, 600, 800, 0, 0, 600, 800, null);
+		g.drawImage(welcomeScreen, 0, 0, width, height, 0, 0, width, height, null);
 	}
 
 	private void gameOverMessage(Graphics g)
