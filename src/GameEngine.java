@@ -9,6 +9,7 @@ import java.io.File;
 import java.sql.Time;
 import java.time.Instant;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 
 public class GameEngine 
@@ -25,7 +26,12 @@ public class GameEngine
 	private boolean endStage1, endStage2;
 	private int score;
 	private SpaceshipSprite spaceship;
-
+	
+	private final String themeMusicUrl = "./sounds/GameMusic.wav";
+	private final String shotSoundUrl = "./sounds/LaserShot.wav";
+	private final String explodeSoundUrl = "./sounds/Explosion.wav";
+	private final String stageCompleteSoundUrl = "./sounds/StageCompleted.wav";
+	
 	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
 	//	private LinkedList<AsteroidSprite> asteroids, deleteAsteroids, addAsteroids;
 	private long lastShootTime;
@@ -34,6 +40,8 @@ public class GameEngine
 
 	public GameEngine(int pWidth, int pHeight)
 	{
+		
+		(new SoundThread(themeMusicUrl, AudioPlayer.LOOP)).start();
 		width = pWidth;
 		height = pHeight;
 		lifeImage = Toolkit.getDefaultToolkit().getImage((new File(".")).getAbsolutePath() + "//life.png");
@@ -72,6 +80,7 @@ public class GameEngine
 
 	private void initializeStageTwo()
 	{
+		(new SoundThread(stageCompleteSoundUrl, AudioPlayer.ONCE)).start();
 		EnemyshipSprite enemy;
 		for (int i =0; i < Settings.ENEMY_IN_A_ROW; i++)
 		{
@@ -80,7 +89,7 @@ public class GameEngine
 				enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 90, 3, 6, "enemySpaceship.png");
 				enemyShips.add(enemy);	
 			}
-		}
+		}	
 	}
 
 	public boolean isGameOver()
@@ -279,6 +288,7 @@ public class GameEngine
 			{
 				bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png"));
 				lastShootTime = now;
+				(new SoundThread(shotSoundUrl, AudioPlayer.ONCE)).start();
 			}
 		}
 	}
@@ -328,6 +338,7 @@ public class GameEngine
 					spaceship.setIsCollide();
 					bullet.setIsCollide();
 					collision = true;
+					(new SoundThread(explodeSoundUrl, AudioPlayer.ONCE)).start();
 				}
 			}
 		}
@@ -340,20 +351,23 @@ public class GameEngine
 	{
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 34));
-		g.drawString("Welcome to Space Invaders!", width/2 - 230, 100);
-		g.setFont(new Font("Arial", Font.PLAIN, 26));
-		g.drawString("Your mission is to destroy all your enemies", width/2 - 240, 160);
-		g.drawString("this is a very dangerous mission, please be", width/2 - 240, 190);
-		g.drawString("careful - try to dodge enemy attacks and try", width/2 - 240, 220);
-		g.drawString("to kill them as soon as possible.", width/2 - 170, 250);
-		g.drawString("when hitted - you are invulnerable for second", width/2 - 250, 280);
-		g.drawString("Please use the following keys:", width/2 - 240, 370);
-		g.drawString("Arrow keys - move your spaceship", width/2 - 240, 430);
-		g.drawString("Space - shoot your enemies", width/2 - 240, 460);
-		g.setFont(new Font("Arial", Font.BOLD, 30));
-		g.drawString("Good Luck!", width/2 - 100, 580);
-		g.setFont(new Font("Arial", Font.PLAIN, 26));
-		g.drawString("Press space when you are ready...", width/2 - 220, 630);
+//		g.drawString("Welcome to Space Invaders!", width/2 - 230, 100);
+//		g.setFont(new Font("Arial", Font.PLAIN, 26));
+//		g.drawString("Your mission is to destroy all your enemies", width/2 - 240, 160);
+//		g.drawString("this is a very dangerous mission, please be", width/2 - 240, 190);
+//		g.drawString("careful - try to dodge enemy attacks and try", width/2 - 240, 220);
+//		g.drawString("to kill them as soon as possible.", width/2 - 170, 250);
+//		g.drawString("when hitted - you are invulnerable for second", width/2 - 250, 280);
+//		g.drawString("Please use the following keys:", width/2 - 240, 370);
+//		g.drawString("Arrow keys - move your spaceship", width/2 - 240, 430);
+//		g.drawString("Space - shoot your enemies", width/2 - 240, 460);
+//		g.setFont(new Font("Arial", Font.BOLD, 30));
+//		g.drawString("Good Luck!", width/2 - 100, 580);
+//		g.setFont(new Font("Arial", Font.PLAIN, 26));
+//		g.drawString("Press space when you are ready...", width/2 - 220, 630);
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image welcomeScreen = toolkit.getImage("./welcomeScreen.png");
+		g.drawImage(welcomeScreen, 0, 0, 600, 800, 0, 0, 600, 800, null);
 	}
 
 	private void gameOverMessage(Graphics g)
