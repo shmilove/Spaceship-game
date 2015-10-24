@@ -34,7 +34,7 @@ public class GameEngine
 	private final int hitEnemy = 1, hitByEnemy = -1;
 	
 	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
-	//	private LinkedList<AsteroidSprite> asteroids, deleteAsteroids, addAsteroids;
+
 	private long lastShootTime;
 	private long moveTime;
 	private long heroCreatedTime;
@@ -44,7 +44,7 @@ public class GameEngine
 		(new SoundThread(themeMusicUrl, AudioPlayer.LOOP)).start();
 		width = pWidth;
 		height = pHeight;
-		lifeImage = Toolkit.getDefaultToolkit().getImage((new File(".")).getAbsolutePath() + "//life.png");
+		lifeImage = Toolkit.getDefaultToolkit().getImage((new File(".")).getAbsolutePath() + "//images//life.png");
 
 		rManager = new RibbonsManager(width, height);
 		gameStart = false;
@@ -371,7 +371,7 @@ public class GameEngine
 //		g.setFont(new Font("Arial", Font.PLAIN, 26));
 //		g.drawString("Press space when you are ready...", width/2 - 220, 630);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image welcomeScreen = toolkit.getImage("./welcomeScreen.png");
+		Image welcomeScreen = toolkit.getImage("./images/welcomeScreen.png");
 		g.drawImage(welcomeScreen, 0, 0, width, height, 0, 0, width, height, null);
 	}
 

@@ -16,7 +16,7 @@ public class RibbonsManager
 		pWidth = w;
 		pHeight = h;
 
-		File pathSky = new File(new File(".").getAbsolutePath()+ "//Sky.png");
+		File pathSky = new File(new File(".").getAbsolutePath()+ "//images//Sky.png");
 
 		BufferedImage skyImg = null;
 		try 

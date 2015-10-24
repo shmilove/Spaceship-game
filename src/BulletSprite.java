@@ -16,7 +16,7 @@ public class BulletSprite extends Sprite
 		markForDelete = false;
 		try 
 		{
-			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//" + imageName)));
+			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//images//" + imageName)));
 		} 
 		catch (IOException e) 
 		{

@@ -15,7 +15,7 @@ public class SpaceshipSprite extends Sprite
 		super(x, y, w, h, speed, angle, hp);
 		try 
 		{
-			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "\\" + imgName)));
+			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//images//" + imgName)));
 		} 
 		catch (IOException e) 
 		{
