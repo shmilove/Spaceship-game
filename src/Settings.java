@@ -32,7 +32,7 @@ public class Settings
 	// Spaceship = Hero
 	public static final int HERO_SPEED = 3;
 	public static final int HERO_HP = 1;
-	public static final int INVULNERABLE = 1000;
+	public static final int INVULNERABLE = 1500;
 
 	// Bullets
 	public static final int HERO_BULLET_SPEED = 8;
