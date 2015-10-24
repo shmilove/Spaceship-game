@@ -31,6 +31,7 @@ public class GameEngine
 	private final String shotSoundUrl = "./sounds/LaserShot.wav";
 	private final String explodeSoundUrl = "./sounds/Explosion.wav";
 	private final String stageCompleteSoundUrl = "./sounds/StageCompleted.wav";
+	private final int hitEnemy = 1, hitByEnemy = -1;
 	
 	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
 	//	private LinkedList<AsteroidSprite> asteroids, deleteAsteroids, addAsteroids;
@@ -130,14 +131,14 @@ public class GameEngine
 			bulletSprite.drawSprite(dbg);
 		}
 
-		for (int i = 0, x = 10; i < numOfLives; ++i, x+=50)
+		for (int i = 0, x = 40; i < numOfLives; ++i, x+=50)
 		{
-			dbg.drawImage(lifeImage, x, 10, null);
+			dbg.drawImage(lifeImage, width-x, 10, null);
 		}
 
-		dbg.setFont(new Font("Arial", Font.BOLD, 16));
+		dbg.setFont(new Font("Stencil Std", Font.PLAIN, 18));
 		dbg.setColor(Color.WHITE);
-		dbg.drawString("Score: " + score, width - 100, 30);
+		dbg.drawString("Score: " + score, 15, 30);
 
 		if (win || lose)
 		{
@@ -307,6 +308,8 @@ public class GameEngine
 					spaceship.setIsCollide();
 					enemy.gotHit(1);
 					collision = true;
+					(new SoundThread(explodeSoundUrl, AudioPlayer.ONCE)).start();
+					updateScore(hitByEnemy);
 				}
 			}
 
@@ -320,6 +323,7 @@ public class GameEngine
 						bullet.setIsCollide();
 						enemy.gotHit(1);
 						collision = true;
+						updateScore(hitEnemy);
 					}
 				}
 			}
@@ -339,6 +343,7 @@ public class GameEngine
 					bullet.setIsCollide();
 					collision = true;
 					(new SoundThread(explodeSoundUrl, AudioPlayer.ONCE)).start();
+					updateScore(hitByEnemy);
 				}
 			}
 		}
@@ -452,5 +457,17 @@ public class GameEngine
 			}
 		}
 		enemyShips.removeAll(deleteEnemyShips);
+	}
+	
+	private void updateScore(int whoHitWho)
+	{
+		if (whoHitWho == hitEnemy)
+			score += 10;
+		else {
+			if (score >= 30)
+				score -= 30;
+			else
+				score=0;
+		}
 	}
 }
