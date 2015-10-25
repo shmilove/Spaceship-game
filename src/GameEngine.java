@@ -389,7 +389,7 @@ public class GameEngine
 		{
 			g.setFont(new Font("Arial", Font.PLAIN, 34));
 			g.setColor(Color.WHITE);
-			g.drawString("You Win!", width/2 - 76, height/2);
+			g.drawString("You Win!", width/2 - 66, height/2);
 			g.setFont(new Font("Arial", Font.PLAIN, 22));
 			g.drawString("Your Final Score: " + score,width/2 - 100, height/2 + 40);
 		}
