@@ -446,7 +446,7 @@ public class GameEngine
 					{
 						bullet.setIsCollide();
 						enemy.gotHit(1);
-						if (enemy.imageWidth==347 && enemy.hp==0)
+						if (startStage3 && enemy.hp<=0)
 							(new SoundThread(bigExplosionSoundUrl, AudioPlayer.ONCE)).start();
 						collision = true;
 						updateScore(hitEnemy);
