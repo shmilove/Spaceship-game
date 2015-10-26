@@ -6,13 +6,15 @@ import java.util.Random;
 public class EnemyshipSprite extends SpaceshipSprite
 {
 	public enum Stages{ STAGE_ONE, STAGE_TWO, STAGE_THREE };
+	private boolean isBoss;
 	private Stages type;
 	private int fireRate;
-
-	public EnemyshipSprite(int x, int y, int w, int h, int stage,String imgName) 
+	
+	public EnemyshipSprite(int x, int y, int w, int h, int stage, boolean isBoss, String imgName) 
 	{
 		super(x, y, w, h, 90, 1,0,imgName);
 		fireRate = 0;
+		this.isBoss = isBoss;
 		switch (stage) 
 		{
 		case 1:
@@ -81,5 +83,10 @@ public class EnemyshipSprite extends SpaceshipSprite
 				return true;  
 		}
 		return false;
+	}
+	
+	public boolean getIsBoss()
+	{
+		return isBoss;
 	}
 }

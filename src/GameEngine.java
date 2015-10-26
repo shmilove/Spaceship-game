@@ -34,7 +34,7 @@ public class GameEngine
 	private final String shotSoundUrl = "./sounds/LaserShot.wav";
 	private final String explodeSoundUrl = "./sounds/Explosion.wav";
 	private final String stageCompleteSoundUrl = "./sounds/StageCompleted.wav";
-	private final String bigExplosionSoundUrl = "./sounds/bigExplosion.wac";
+	private final String bigExplosionSoundUrl = "./sounds/bigExplosion.wav";
 	private final int hitEnemy = 1, hitByEnemy = -1;
 
 	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
@@ -92,7 +92,7 @@ public class GameEngine
 			{
 				for (int j =0; j < Settings.ENEMY_ROWS; j++)
 				{
-					enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height,1 , "enemySpaceship.png");
+					enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height,1 , false, "enemySpaceship.png");
 					enemyShips.add(enemy);	
 				}
 			}
@@ -116,7 +116,7 @@ public class GameEngine
 			{
 				for (int j =0; j < Settings.ENEMY_ROWS; j++)
 				{
-					enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 2, "enemySpaceship.png");
+					enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 2, false, "enemySpaceship.png");
 					enemyShips.add(enemy);	
 				}
 			}	
@@ -136,7 +136,7 @@ public class GameEngine
 			endTextStage3 = true;
 			startStage3 = false;
 			EnemyshipSprite enemy;
-			enemy = new EnemyshipSprite(width/2 - 200, 40, width, height, 3, "boss.png");
+			enemy = new EnemyshipSprite(width/2 - 200, 40, width, height, 3, true, "boss.png");
 			enemyShips.add(enemy);	
 		}
 	}
@@ -320,7 +320,6 @@ public class GameEngine
 						{
 							Random rand = new Random();
 							int randomNum = rand.nextInt(6) + 3;
-							System.out.println(randomNum);
 							for (int i=0 ; i < randomNum ; i++) {
 								int randomLoc = rand.nextInt(enemyshipSprite.getImageWidth());
 								enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + randomLoc, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
@@ -446,7 +445,7 @@ public class GameEngine
 					{
 						bullet.setIsCollide();
 						enemy.gotHit(1);
-						if (startStage3 && enemy.hp<=0)
+						if (enemy.getIsBoss() && enemy.hp<=0)
 							(new SoundThread(bigExplosionSoundUrl, AudioPlayer.ONCE)).start();
 						collision = true;
 						updateScore(hitEnemy);
@@ -494,6 +493,9 @@ public class GameEngine
 			g.drawString("Game Over!", width/2 - 70, height/2);
 			g.setFont(new Font("Arial", Font.PLAIN, 22));
 			g.drawString("Your Final Score: " + score,width/2 - 76, height/2 + 40);
+			
+//			Image gameOverScreen = toolkit.getImage("./images/gameOver.png");
+//			g.drawImage(gameOverScreen, 0, 0, width, height, 0, 0, width, height, null);
 		}
 		else
 		{
