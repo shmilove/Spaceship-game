@@ -27,7 +27,8 @@ public class GameEngine
 	private boolean endTextStage1, endTextStage2, endTextStage3, doOnce;
 	private int score;
 	private SpaceshipSprite spaceship;
-
+	private Toolkit toolkit = Toolkit.getDefaultToolkit();
+	
 	private final String themeMusicUrl = "./sounds/GameMusic.wav";
 	private final String shotSoundUrl = "./sounds/LaserShot.wav";
 	private final String explodeSoundUrl = "./sounds/Explosion.wav";
@@ -184,21 +185,18 @@ public class GameEngine
 
 		if (displayStageOneText)
 		{
-			dbg.setFont(new Font("Arial", Font.BOLD, 60));
-			dbg.setColor(Color.WHITE);
-			dbg.drawString("Stage 1", width/2 - 100, height/2);
+			Image stage1 = toolkit.getImage("./images/stage1.png");
+			dbg.drawImage(stage1, 0, 0, width, height, 0, 0, width, height, null);
 		}
 		if (displayStageTwoText)
 		{
-			dbg.setFont(new Font("Arial", Font.BOLD, 60));
-			dbg.setColor(Color.WHITE);
-			dbg.drawString("Stage 2", width/2 - 100, height/2);
+			Image stage2 = toolkit.getImage("./images/stage2.png");
+			dbg.drawImage(stage2, 0, 0, width, height, 0, 0, width, height, null);
 		}
 		if (displayStageThreeText)
 		{
-			dbg.setFont(new Font("Arial", Font.BOLD, 60));
-			dbg.setColor(Color.WHITE);
-			dbg.drawString("Boss Stage", width/2 - 150, height/2);
+			Image bossStage = toolkit.getImage("./images/StageBoss.png");
+			dbg.drawImage(bossStage, 0, 0, width, height, 0, 0, width, height, null);
 		}
 
 		for (BulletSprite bullet : bullets)
@@ -472,7 +470,6 @@ public class GameEngine
 
 	private void drawInstructions(Graphics g)
 	{
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image welcomeScreen = toolkit.getImage("./images/welcomeScreen.png");
 		g.drawImage(welcomeScreen, 0, 0, width, height, 0, 0, width, height, null);
 	}
