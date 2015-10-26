@@ -8,6 +8,8 @@ public class Settings
 	// Game Engine
 	public static final int NUM_OF_LIVES = 3;
 	public static final int SHOT_THRESHOLD = 150;
+	public static final int BLINK_TIME = 300;
+	public static final int DISPLAY_TEXT_TIME = 3000;
 	
 	// Enemies
 	public static final int MOVE_THRESHOLD = 150;
