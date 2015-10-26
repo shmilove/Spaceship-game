@@ -198,7 +198,7 @@ public class GameEngine
 		{
 			dbg.setFont(new Font("Arial", Font.BOLD, 60));
 			dbg.setColor(Color.WHITE);
-			dbg.drawString("Boss Stage", width/2 - 110, height/2);
+			dbg.drawString("Boss Stage", width/2 - 150, height/2);
 		}
 
 		for (BulletSprite bullet : bullets)
@@ -263,7 +263,8 @@ public class GameEngine
 			{
 				if (doOnce)
 				{
-					
+					startStageThreeTime = System.currentTimeMillis();
+					(new SoundThread(stageCompleteSoundUrl, AudioPlayer.ONCE)).start();
 					doOnce = !doOnce;
 				}
 				initializeStageThree();
