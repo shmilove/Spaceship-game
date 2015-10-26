@@ -34,6 +34,7 @@ public class GameEngine
 	private final String shotSoundUrl = "./sounds/LaserShot.wav";
 	private final String explodeSoundUrl = "./sounds/Explosion.wav";
 	private final String stageCompleteSoundUrl = "./sounds/StageCompleted.wav";
+	private final String bigExplosionSoundUrl = "./sounds/bigExplosion.wac";
 	private final int hitEnemy = 1, hitByEnemy = -1;
 
 	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
@@ -445,6 +446,8 @@ public class GameEngine
 					{
 						bullet.setIsCollide();
 						enemy.gotHit(1);
+						if (enemy.imageWidth==347 && enemy.hp==0)
+							(new SoundThread(bigExplosionSoundUrl, AudioPlayer.ONCE)).start();
 						collision = true;
 						updateScore(hitEnemy);
 					}
