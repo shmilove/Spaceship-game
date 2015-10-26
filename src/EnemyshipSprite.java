@@ -49,25 +49,25 @@ public class EnemyshipSprite extends SpaceshipSprite
 		angle = 90;
 		hp = Settings.HP_ENEMY_ONE;
 		speed = Settings.ENEMY1_SPEED;
-		fireRate = 3;
+		fireRate = Settings.ENEMY1_FIRERATE;
 	}
 	
 	private void stageTwo()
 	{
 		type = Stages.STAGE_TWO;
 		angle = 90;
-		hp = Settings.HP_ENEMY_ONE;
-		speed = Settings.ENEMY1_SPEED*2;
-		fireRate = 4;
+		hp = Settings.HP_ENEMY_TWO;
+		speed = Settings.ENEMY2_SPEED;
+		fireRate = Settings.ENEMY2_FIRERATE;
 	}
 	
 	private void stageThree()
 	{
 		type = Stages.STAGE_THREE;
 		angle = 90;
-		hp = 100;
-		speed = Settings.ENEMY1_SPEED*2;
-		fireRate = 7;
+		hp = Settings.HP_ENEMY_THREE;
+		speed = Settings.ENEMY3_SPEED;
+		fireRate = Settings.ENEMY3_FIRERATE;
 	}
 
 

@@ -19,8 +19,14 @@ public class Settings
 	public static final int ENEMY2_BULLET_SPEED = 3;
 	public static final int ENEMY3_BULLET_SPEED = 2;
 	public static final int ENEMY1_SPEED = 3;
-	public static final int HP_ENEMY_TWO = 3;
+	public static final int ENEMY2_SPEED = 5;
+	public static final int ENEMY3_SPEED = 7;
 	public static final int HP_ENEMY_ONE = 1;
+	public static final int HP_ENEMY_TWO = 3;
+	public static final int HP_ENEMY_THREE = 100;
+	public static final int ENEMY1_FIRERATE = 3;
+	public static final int ENEMY2_FIRERATE = 4;
+	public static final int ENEMY3_FIRERATE = 7;
 	public static final int ENEMY1_WIDTH = 80;
 	public static final int ENEMY1_HEIGHT = 50;
 	public static final int ENEMY1_WIDTH_SPACE = 30;
