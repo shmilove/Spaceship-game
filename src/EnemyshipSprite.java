@@ -51,7 +51,7 @@ public class EnemyshipSprite extends SpaceshipSprite
     	{
     		Random rand = new Random();
         	int num = rand.nextInt(100);
-        	if(num > 98)
+        	if(num > 97)
         		return true;  
     	}
     	return false;
