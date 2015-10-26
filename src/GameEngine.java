@@ -22,9 +22,9 @@ public class GameEngine
 	private RibbonsManager rManager;
 	private boolean gameStart , moveLeft = true;
 	private LinkedList<EnemyshipSprite> enemyShips, deleteEnemyShips;
-	private boolean win, lose, startStage1, startStage2, startBoss;
-	private boolean endStage1, endStage2, isInvulnerable, displayStageOneText, displayStageTwoText;
-	private boolean endTextStage1, endTextStage2, doOnce;
+	private boolean win, lose, startStage1, startStage2, startStage3;
+	private boolean endStage1, endStage2, endStage3, isInvulnerable, displayStageOneText, displayStageTwoText, displayStageThreeText;
+	private boolean endTextStage1, endTextStage2, endTextStage3, doOnce;
 	private int score;
 	private SpaceshipSprite spaceship;
 
@@ -38,7 +38,7 @@ public class GameEngine
 
 	private long lastShootTime;
 	private long moveTime;
-	private long heroCreatedTime, startStageOneTime, startStageTwoTime;
+	private long heroCreatedTime, startStageOneTime, startStageTwoTime, startStageThreeTime;
 	private long blinkTime, notBlinkTime;
 
 	public GameEngine(int pWidth, int pHeight)
@@ -54,7 +54,7 @@ public class GameEngine
 		enemyShips = new LinkedList<EnemyshipSprite>();
 		deleteEnemyShips = new LinkedList<EnemyshipSprite>();
 		score = 0;
-		win = lose = startStage2 = startBoss = endStage1 = endStage2 = false;
+		win = lose = startStage2 = startStage3 = endStage1 = endStage2 = false;
 		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
 		bullets = new LinkedList<BulletSprite>();
 		deleteBullets = new LinkedList<BulletSprite>();
@@ -65,8 +65,8 @@ public class GameEngine
 		heroCreatedTime = System.currentTimeMillis();
 		startStage1 = true;;
 		isInvulnerable = false;
-		endTextStage1 = false;
-		displayStageOneText = displayStageTwoText = false;
+		endTextStage1 = endTextStage2 = endTextStage3 = false;
+		displayStageOneText = displayStageTwoText = displayStageThreeText = false;
 		doOnce = true;
 
 		rManager.moveDown();
@@ -117,6 +117,24 @@ public class GameEngine
 					enemyShips.add(enemy);	
 				}
 			}	
+		}
+	}
+	
+	private void initializeStageThree()
+	{
+		long now = System.currentTimeMillis();
+		if (now - startStageThreeTime < Settings.DISPLAY_TEXT_TIME)
+		{
+			displayStageThreeText = true;
+		}
+		else
+		{
+			displayStageThreeText = false;
+			endTextStage3 = true;
+			startStage3 = false;
+			EnemyshipSprite enemy;
+			enemy = new EnemyshipSprite(width/2 - 200, 40, width, height, 3, "boss.png");
+			enemyShips.add(enemy);	
 		}
 	}
 
@@ -175,6 +193,12 @@ public class GameEngine
 			dbg.setFont(new Font("Arial", Font.BOLD, 60));
 			dbg.setColor(Color.WHITE);
 			dbg.drawString("Stage 2", width/2 - 100, height/2);
+		}
+		if (displayStageThreeText)
+		{
+			dbg.setFont(new Font("Arial", Font.BOLD, 60));
+			dbg.setColor(Color.WHITE);
+			dbg.drawString("Boss Stage", width/2 - 110, height/2);
 		}
 
 		for (BulletSprite bullet : bullets)
@@ -235,9 +259,14 @@ public class GameEngine
 				initializeStageTwo();
 			}
 
-			if (startBoss)
+			if (startStage3)
 			{
-
+				if (doOnce)
+				{
+					
+					doOnce = !doOnce;
+				}
+				initializeStageThree();
 			}
 
 
@@ -251,9 +280,13 @@ public class GameEngine
 				else if (!endStage2 && endTextStage2)
 				{
 					endStage2 = true;
-					startBoss = true;
+					startStage3 = true;
 				}
-				else if (endStage1 && endStage2)
+				else if (!endStage3 && endTextStage3)
+				{
+					endStage3 = true;
+				}
+				else if (endStage1 && endStage2 && endStage3)
 				{
 					win = true;
 				}
@@ -274,7 +307,22 @@ public class GameEngine
 				{
 					if(enemyshipSprite.fire())
 					{
-						enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY1_BULLET_SPEED, 180, "EnemyBullet.png"));
+						if (enemyshipSprite.getType() == EnemyshipSprite.Stages.STAGE_ONE)
+						{
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY1_BULLET_SPEED, 180, "EnemyBullet.png"));
+						}
+						else if (enemyshipSprite.getType() == EnemyshipSprite.Stages.STAGE_TWO)
+						{
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY2_BULLET_SPEED, 180, "EnemyBullet.png"));
+						}
+						else if (enemyshipSprite.getType() == EnemyshipSprite.Stages.STAGE_THREE)
+						{
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2 - 80, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2 - 160, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2 + 80, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2 + 160, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
+						}
 					}
 				}
 			}
