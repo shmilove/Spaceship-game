@@ -116,7 +116,7 @@ public class GameEngine
 			{
 				for (int j =0; j < Settings.ENEMY_ROWS; j++)
 				{
-					enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 2, false, "enemySpaceship.png");
+					enemy = new EnemyshipSprite(i*Settings.ENEMY2_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY2_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 2, false, "enemySpaceship2.png");
 					enemyShips.add(enemy);	
 				}
 			}	
@@ -197,7 +197,7 @@ public class GameEngine
 		}
 		if (displayStageThreeText)
 		{
-			Image bossStage = toolkit.getImage("./images/StageBoss.png");
+			Image bossStage = toolkit.getImage("./images/Stage3.png");
 			dbg.drawImage(bossStage, 0, 0, width, height, 0, 0, width, height, null);
 		}
 
@@ -493,9 +493,8 @@ public class GameEngine
 			g.drawString("Game Over!", width/2 - 70, height/2);
 			g.setFont(new Font("Arial", Font.PLAIN, 22));
 			g.drawString("Your Final Score: " + score,width/2 - 76, height/2 + 40);
-			
-//			Image gameOverScreen = toolkit.getImage("./images/gameOver.png");
-//			g.drawImage(gameOverScreen, 0, 0, width, height, 0, 0, width, height, null);
+//			Image gameOverScreen = toolkit.getImage("./images/Stage2.png");
+//			dbg.drawImage(gameOverScreen, 0, 0, width, height, 0, 0, width, height, null);
 		}
 		else
 		{

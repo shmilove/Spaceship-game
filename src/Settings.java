@@ -26,9 +26,11 @@ public class Settings
 	public static final int HP_ENEMY_THREE = 100;
 	public static final int ENEMY1_FIRERATE = 3;
 	public static final int ENEMY2_FIRERATE = 4;
-	public static final int ENEMY3_FIRERATE = 13; // <---- THIS WAS CHANGED FROM 7 TO 13
+	public static final int ENEMY3_FIRERATE = 13; 
 	public static final int ENEMY1_WIDTH = 80;
+	public static final int ENEMY2_WIDTH = 80;
 	public static final int ENEMY1_HEIGHT = 50;
+	public static final int ENEMY2_HEIGHT = 70;
 	public static final int ENEMY1_WIDTH_SPACE = 30;
 	public static final int ENEMY1_HEIGHT_SPACE = 50;
 	public static final int ENEMY_ROWS = 4;
