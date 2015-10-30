@@ -174,22 +174,22 @@ public class GameEngine
 				{
 					if(enemyshipSprite.fire())
 					{
-						if (enemyshipSprite.getType() == EnemyshipSprite.Stages.STAGE_ONE)
-						{
+						switch(Stages.currentStage) {
+						case 1:
 							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY1_BULLET_SPEED, 180, "EnemyBullet.png"));
-						}
-						else if (enemyshipSprite.getType() == EnemyshipSprite.Stages.STAGE_TWO)
-						{
+							break;
+						case 2:
 							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY2_BULLET_SPEED, 180, "EnemyBullet.png"));
-						}
-						else if (enemyshipSprite.getType() == EnemyshipSprite.Stages.STAGE_THREE)
-						{
+							break;
+						case 3:
 							Random rand = new Random();
 							int randomNum = rand.nextInt(6) + 3;
 							for (int i=0 ; i < randomNum ; i++) {
 								int randomLoc = rand.nextInt(enemyshipSprite.getImageWidth());
 								enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + randomLoc, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
 							}
+							break;
+							
 						}
 					}
 				}
@@ -306,7 +306,7 @@ public class GameEngine
 					{
 						bullet.setIsCollide();
 						enemy.gotHit(1);
-						if (enemy.getIsBoss() && enemy.hp<=0)
+						if (stages.isBossStage() && enemy.hp<=0)
 							(new SoundThread(bigExplosionSoundUrl, AudioPlayer.ONCE)).start();
 						collision = true;
 						updateScore(hitEnemy);

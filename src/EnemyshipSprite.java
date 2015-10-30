@@ -5,22 +5,17 @@ import java.util.Random;
 
 public class EnemyshipSprite extends SpaceshipSprite
 {
-	public enum Stages{ STAGE_ONE, STAGE_TWO, STAGE_THREE };
-	private boolean isBoss;
-	private Stages type;
 	private int fireRate;
 	
-	public EnemyshipSprite(int x, int y, int w, int h, int stage, boolean isBoss, String imgName) 
+	public EnemyshipSprite(int x, int y, int w, int h, String imgName) 
 	{
 		super(x, y, w, h, 90, 1,0,imgName);
 		fireRate = 0;
-		this.isBoss = isBoss;
-		switch (stage) 
+		switch (Stages.currentStage) 
 		{
 		case 1:
 			stageOne();
 			break;
-
 		case 2:
 			stageTwo();
 			break;
@@ -30,48 +25,33 @@ public class EnemyshipSprite extends SpaceshipSprite
 		}
 	}
 	
-	public Stages getType()
-	{
-		return type;
-	}
 
 	public void drawSprite(Graphics2D g)
 	{
 		g.drawImage(bImage, locX, locY, null);
 	}
 
-	public void updateSprite()
-	{ 
-
-	}
 	
 	private void stageOne()
 	{
-		type = Stages.STAGE_ONE;
-		angle = 90;
-		hp = Settings.HP_ENEMY_ONE;
+		hp = Settings.ENEMY1_HP;
 		speed = Settings.ENEMY1_SPEED;
 		fireRate = Settings.ENEMY1_FIRERATE;
 	}
 	
 	private void stageTwo()
 	{
-		type = Stages.STAGE_TWO;
-		angle = 90;
-		hp = Settings.HP_ENEMY_TWO;
+		hp = Settings.ENEMY2_HP;
 		speed = Settings.ENEMY2_SPEED;
 		fireRate = Settings.ENEMY2_FIRERATE;
 	}
 	
 	private void stageThree()
 	{
-		type = Stages.STAGE_THREE;
-		angle = 90;
-		hp = Settings.HP_ENEMY_THREE;
+		hp = Settings.ENEMY3_HP;
 		speed = Settings.ENEMY3_SPEED;
 		fireRate = Settings.ENEMY3_FIRERATE;
 	}
-
 
 	public boolean fire()
 	{
@@ -83,10 +63,5 @@ public class EnemyshipSprite extends SpaceshipSprite
 				return true;  
 		}
 		return false;
-	}
-	
-	public boolean getIsBoss()
-	{
-		return isBoss;
 	}
 }

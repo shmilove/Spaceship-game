@@ -8,23 +8,22 @@ public class Stages
 {
 	private final int numOfStages = 10;
 	private final int bossStage1 = 3, bossStage2 = 6;
+	private final int[] bossStage = {bossStage1, bossStage2};
 
 	private boolean doOnce;
-	
-	
 	private boolean[] startStage = new boolean[numOfStages];
 	private boolean[] endStage = new boolean[numOfStages];
 	private boolean[] endStageText = new boolean[numOfStages];
 	private boolean[] displayStageText = new boolean[numOfStages];
 	private long[] startStageTime = new long[numOfStages];
-	private int currentStage = 1;
-	private final int[] bossStage = {bossStage1, bossStage2};
 	
 	private Toolkit toolkit = Toolkit.getDefaultToolkit();
 	private int width, height;
 	
-
 	private final String stageCompleteSoundUrl = "./sounds/StageCompleted.wav";
+	
+	public static int currentStage = 1;
+
 	
 	public Stages(int pWidth, int pHeight)
 	{
@@ -59,7 +58,7 @@ public class Stages
 				{
 					if (currentStage==bossStage[i])
 					{
-						EnemyshipSprite enemy = new EnemyshipSprite(width/2 - 200, 40, width, height, 3, true, "boss.png");
+						EnemyshipSprite enemy = new EnemyshipSprite(width/2 - 200, 40, width, height, "boss.png");
 						enemyShips.add(enemy);
 						return enemyShips;
 					}
@@ -71,10 +70,10 @@ public class Stages
 					{
 						EnemyshipSprite enemy;
 						switch(currentStage) {
-						case 1:	enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height,1 , false, "enemySpaceship.png");
+						case 1:	enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, "enemySpaceship.png");
 								enemyShips.add(enemy);
 								break;
-						case 2: enemy = new EnemyshipSprite(i*Settings.ENEMY2_WIDTH + Settings.ENEMY2_WIDTH_SPACE, j*Settings.ENEMY2_HEIGHT + Settings.ENEMY2_HEIGHT_SPACE, width, height,2 , false, "enemySpaceship2.png");
+						case 2: enemy = new EnemyshipSprite(i*Settings.ENEMY2_WIDTH + Settings.ENEMY2_WIDTH_SPACE, j*Settings.ENEMY2_HEIGHT + Settings.ENEMY2_HEIGHT_SPACE, width, height, "enemySpaceship2.png");
 								enemyShips.add(enemy);
 								break;
 
@@ -111,5 +110,15 @@ public class Stages
 			Image stageText = toolkit.getImage("./images/stage"+ currentStage +".png");
 			dbg.drawImage(stageText, 0, 0, width, height, 0, 0, width, height, null);
 		}
+	}
+	
+	public boolean isBossStage()
+	{
+		for(int i=0 ; i < bossStage.length ; i++)
+		{
+			if (currentStage == bossStage[i])
+				return true;
+		}
+		return false;
 	}
 }
