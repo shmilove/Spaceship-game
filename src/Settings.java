@@ -32,7 +32,9 @@ public class Settings
 	public static final int ENEMY1_HEIGHT = 50;
 	public static final int ENEMY2_HEIGHT = 70;
 	public static final int ENEMY1_WIDTH_SPACE = 30;
+	public static final int ENEMY2_WIDTH_SPACE = 30;
 	public static final int ENEMY1_HEIGHT_SPACE = 50;
+	public static final int ENEMY2_HEIGHT_SPACE = 50;
 	public static final int ENEMY_ROWS = 4;
 	public static final int ENEMY_IN_A_ROW = 7;
 	

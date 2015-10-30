@@ -21,11 +21,11 @@ public class GameEngine
 	private Image bgImage;
 	private Image lifeImage;
 	private RibbonsManager rManager;
+	private Stages stages;
 	private boolean gameStart , moveLeft = true;
 	private LinkedList<EnemyshipSprite> enemyShips, deleteEnemyShips;
-	private boolean win, lose, startStage1, startStage2, startStage3;
-	private boolean endStage1, endStage2, endStage3, isInvulnerable, displayStageOneText, displayStageTwoText, displayStageThreeText;
-	private boolean endTextStage1, endTextStage2, endTextStage3, doOnce;
+	private boolean win, lose;
+	private boolean isInvulnerable;
 	private int score;
 	private SpaceshipSprite spaceship;
 	private Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -33,7 +33,6 @@ public class GameEngine
 	private final String themeMusicUrl = "./sounds/GameMusic.wav";
 	private final String shotSoundUrl = "./sounds/LaserShot.wav";
 	private final String explodeSoundUrl = "./sounds/Explosion.wav";
-	private final String stageCompleteSoundUrl = "./sounds/StageCompleted.wav";
 	private final String bigExplosionSoundUrl = "./sounds/bigExplosion.wav";
 	private final int hitEnemy = 1, hitByEnemy = -1;
 
@@ -41,7 +40,7 @@ public class GameEngine
 
 	private long lastShootTime;
 	private long moveTime;
-	private long heroCreatedTime, startStageOneTime, startStageTwoTime, startStageThreeTime;
+	private long heroCreatedTime;
 	private long blinkTime, notBlinkTime;
 
 	public GameEngine(int pWidth, int pHeight)
@@ -53,11 +52,12 @@ public class GameEngine
 		lifeImage = Toolkit.getDefaultToolkit().getImage((new File(".")).getAbsolutePath() + "//images//life.png");
 
 		rManager = new RibbonsManager(width, height);
+		stages = new Stages(width, height);
 		gameStart = false;
 		enemyShips = new LinkedList<EnemyshipSprite>();
 		deleteEnemyShips = new LinkedList<EnemyshipSprite>();
 		score = 0;
-		win = lose = startStage2 = startStage3 = endStage1 = endStage2 = false;
+		win = lose = false;
 		spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
 		bullets = new LinkedList<BulletSprite>();
 		deleteBullets = new LinkedList<BulletSprite>();
@@ -66,80 +66,11 @@ public class GameEngine
 		lastShootTime = System.currentTimeMillis();
 		moveTime = System.currentTimeMillis();
 		heroCreatedTime = System.currentTimeMillis();
-		startStage1 = true;;
 		isInvulnerable = false;
-		endTextStage1 = endTextStage2 = endTextStage3 = false;
-		displayStageOneText = displayStageTwoText = displayStageThreeText = false;
-		doOnce = true;
 
 		rManager.moveDown();
 	}
 
-	private void initializeStageOne()
-	{
-		long now = System.currentTimeMillis();
-		if (now - startStageOneTime < Settings.DISPLAY_TEXT_TIME)
-		{
-			displayStageOneText = true;
-		}
-		else
-		{
-			displayStageOneText = false;
-			endTextStage1 = true;
-			startStage1 = false;
-			EnemyshipSprite enemy;
-			for (int i =0; i < Settings.ENEMY_IN_A_ROW; i++)
-			{
-				for (int j =0; j < Settings.ENEMY_ROWS; j++)
-				{
-					enemy = new EnemyshipSprite(i*Settings.ENEMY1_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY1_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height,1 , false, "enemySpaceship.png");
-					enemyShips.add(enemy);	
-				}
-			}
-		}
-	}
-
-	private void initializeStageTwo()
-	{
-		long now = System.currentTimeMillis();
-		if (now - startStageTwoTime < Settings.DISPLAY_TEXT_TIME)
-		{
-			displayStageTwoText = true;
-		}
-		else
-		{
-			displayStageTwoText = false;
-			endTextStage2 = true;
-			startStage2 = false;
-			EnemyshipSprite enemy;
-			for (int i =0; i < Settings.ENEMY_IN_A_ROW; i++)
-			{
-				for (int j =0; j < Settings.ENEMY_ROWS; j++)
-				{
-					enemy = new EnemyshipSprite(i*Settings.ENEMY2_WIDTH + Settings.ENEMY1_WIDTH_SPACE, j*Settings.ENEMY2_HEIGHT + Settings.ENEMY1_HEIGHT_SPACE, width, height, 2, false, "enemySpaceship2.png");
-					enemyShips.add(enemy);	
-				}
-			}	
-		}
-	}
-	
-	private void initializeStageThree()
-	{
-		long now = System.currentTimeMillis();
-		if (now - startStageThreeTime < Settings.DISPLAY_TEXT_TIME)
-		{
-			displayStageThreeText = true;
-		}
-		else
-		{
-			displayStageThreeText = false;
-			endTextStage3 = true;
-			startStage3 = false;
-			EnemyshipSprite enemy;
-			enemy = new EnemyshipSprite(width/2 - 200, 40, width, height, 3, true, "boss.png");
-			enemyShips.add(enemy);	
-		}
-	}
 
 	public boolean isGameOver()
 	{
@@ -185,21 +116,7 @@ public class GameEngine
 			spaceship.drawSprite(dbg);
 		}
 
-		if (displayStageOneText)
-		{
-			Image stage1 = toolkit.getImage("./images/stage1.png");
-			dbg.drawImage(stage1, 0, 0, width, height, 0, 0, width, height, null);
-		}
-		if (displayStageTwoText)
-		{
-			Image stage2 = toolkit.getImage("./images/stage2.png");
-			dbg.drawImage(stage2, 0, 0, width, height, 0, 0, width, height, null);
-		}
-		if (displayStageThreeText)
-		{
-			Image bossStage = toolkit.getImage("./images/Stage3.png");
-			dbg.drawImage(bossStage, 0, 0, width, height, 0, 0, width, height, null);
-		}
+		stages.displayStageText(dbg);
 
 		for (BulletSprite bullet : bullets)
 			bullet.drawSprite(dbg);
@@ -238,61 +155,10 @@ public class GameEngine
 
 		if (gameStart)
 		{
-			if (startStage1)
-			{
-				if (doOnce)
-				{
-					startStageOneTime = System.currentTimeMillis();
-					doOnce = !doOnce;
-				}
-				initializeStageOne();
-			}
-
-			if (startStage2)
-			{
-				if (!doOnce)
-				{
-					startStageTwoTime = System.currentTimeMillis();
-					(new SoundThread(stageCompleteSoundUrl, AudioPlayer.ONCE)).start();
-					doOnce = !doOnce;
-				}
-				initializeStageTwo();
-			}
-
-			if (startStage3)
-			{
-				if (doOnce)
-				{
-					startStageThreeTime = System.currentTimeMillis();
-					(new SoundThread(stageCompleteSoundUrl, AudioPlayer.ONCE)).start();
-					doOnce = !doOnce;
-				}
-				initializeStageThree();
-			}
-
-
+			enemyShips = stages.initializeNewStage(enemyShips);
+			
 			if (enemyShips.isEmpty())
-			{
-				if (!endStage1 && endTextStage1)
-				{
-					endStage1 = true;
-					startStage2 = true;
-				}
-				else if (!endStage2 && endTextStage2)
-				{
-					endStage2 = true;
-					startStage3 = true;
-				}
-				else if (!endStage3 && endTextStage3)
-				{
-					endStage3 = true;
-				}
-				else if (endStage1 && endStage2 && endStage3)
-				{
-					win = true;
-				}
-			}
-
+				win = stages.moveStage();
 
 			if (checkCollisions())
 				doCollisionLogic();
@@ -324,11 +190,6 @@ public class GameEngine
 								int randomLoc = rand.nextInt(enemyshipSprite.getImageWidth());
 								enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + randomLoc, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
 							}
-//							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
-//							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2 - 80, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
-//							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2 - 160, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
-//							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2 + 80, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
-//							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2 + 160, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
 						}
 					}
 				}
