@@ -34,6 +34,7 @@ public class GameEngine
 	private final String shotSoundUrl = "./sounds/LaserShot.wav";
 	private final String explodeSoundUrl = "./sounds/Explosion.wav";
 	private final String bigExplosionSoundUrl = "./sounds/bigExplosion.wav";
+	private final String extraLifeSoundUrl = "./sounds/ExtraLife.wav";
 	private final int hitEnemy = 1, hitByEnemy = -1;
 
 	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
@@ -52,7 +53,7 @@ public class GameEngine
 		lifeImage = Toolkit.getDefaultToolkit().getImage((new File(".")).getAbsolutePath() + "//images//life.png");
 
 		rManager = new RibbonsManager(width, height);
-		stages = new Stages(width, height);
+		stages = new Stages();
 		gameStart = false;
 		enemyShips = new LinkedList<EnemyshipSprite>();
 		deleteEnemyShips = new LinkedList<EnemyshipSprite>();
@@ -174,22 +175,16 @@ public class GameEngine
 				{
 					if(enemyshipSprite.fire())
 					{
-						switch(Stages.currentStage) {
-						case 1:
-							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY1_BULLET_SPEED, 180, "EnemyBullet.png"));
-							break;
-						case 2:
-							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY2_BULLET_SPEED, 180, "EnemyBullet.png"));
-							break;
-						case 3:
+						if (stages.isBossStage()) {
 							Random rand = new Random();
 							int randomNum = rand.nextInt(6) + 3;
 							for (int i=0 ; i < randomNum ; i++) {
 								int randomLoc = rand.nextInt(enemyshipSprite.getImageWidth());
-								enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + randomLoc, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMY3_BULLET_SPEED*2, 180, "EnemyBullet.png"));
+								enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + randomLoc, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.BOSS1_BULLET_SPEED*2, 180, "EnemyBullet.png"));
 							}
-							break;
-							
+						}
+						else {
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMIES_BULLET_SPEED[stages.currentStage], 180, "EnemyBullet.png"));
 						}
 					}
 				}
@@ -421,13 +416,31 @@ public class GameEngine
 
 	private void updateScore(int whoHitWho)
 	{
-		if (whoHitWho == hitEnemy)
-			score += 10;
+		if (whoHitWho == hitEnemy) {
+			for (int i=0 ; i < stages.currentStage ; i++)
+			{
+				score += 10;
+				if (checkForLifeBonus()) {
+					numOfLives++;
+					(new SoundThread(extraLifeSoundUrl, AudioPlayer.ONCE)).start();
+				}
+			}
+		}
 		else {
 			if (score >= 30)
 				score -= 30;
 			else
 				score=0;
 		}
+	}
+	
+	private boolean checkForLifeBonus()
+	{
+		for (int i=0 ; i<Settings.LIFE_BONUSES.length ; i++)
+		{
+			if (score==Settings.LIFE_BONUSES[i])
+				return true;
+		}
+		return false;
 	}
 }
