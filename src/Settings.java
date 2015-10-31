@@ -46,8 +46,8 @@ public class Settings
 	private static final int ENEMY4_SPEED = 5;
 	private static final int ENEMY4_BULLET_SPEED = 3;
 	private static final int ENEMY4_FIRERATE = 5;
-	private static final int ENEMY4_WIDTH = 80;
-	private static final int ENEMY4_HEIGHT = 70;			
+	private static final int ENEMY4_WIDTH = 70;
+	private static final int ENEMY4_HEIGHT = 60;			
 	private static final int ENEMY4_WIDTH_SPACE = 30;
 	private static final int ENEMY4_HEIGHT_SPACE = 50;
 	
@@ -55,8 +55,8 @@ public class Settings
 	private static final int ENEMY5_SPEED = 6;
 	private static final int ENEMY5_BULLET_SPEED = 4;
 	private static final int ENEMY5_FIRERATE = 6;
-	private static final int ENEMY5_WIDTH = 80;
-	private static final int ENEMY5_HEIGHT = 70;			
+	private static final int ENEMY5_WIDTH = 70;
+	private static final int ENEMY5_HEIGHT = 60;			
 	private static final int ENEMY5_WIDTH_SPACE = 30;
 	private static final int ENEMY5_HEIGHT_SPACE = 50;
 	
@@ -64,8 +64,8 @@ public class Settings
 	private static final int ENEMY6_SPEED = 7;
 	private static final int ENEMY6_BULLET_SPEED = 5;
 	private static final int ENEMY6_FIRERATE = 7;
-	private static final int ENEMY6_WIDTH = 80;
-	private static final int ENEMY6_HEIGHT = 70;			
+	private static final int ENEMY6_WIDTH = 70;
+	private static final int ENEMY6_HEIGHT = 60;			
 	private static final int ENEMY6_WIDTH_SPACE = 30;
 	private static final int ENEMY6_HEIGHT_SPACE = 50;
 	
