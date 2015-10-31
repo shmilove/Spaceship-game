@@ -516,7 +516,7 @@ public class GameEngine
 	{
 		Random rand = new Random();
 		int randomNum = rand.nextInt(100);
-		if (randomNum < 4)
+		if (randomNum < 5)
 		{	
 			upgrades.add(new UpgradeSprite(enemyX, enemyY, width, height, 2, 90, "firepowerBonus.png"));
 		}
