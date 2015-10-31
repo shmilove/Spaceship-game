@@ -180,11 +180,11 @@ public class GameEngine
 							int randomNum = rand.nextInt(6) + 3;
 							for (int i=0 ; i < randomNum ; i++) {
 								int randomLoc = rand.nextInt(enemyshipSprite.getImageWidth());
-								enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + randomLoc, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.BOSS1_BULLET_SPEED*2, 180, "EnemyBullet.png"));
+								enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + randomLoc, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.BOSS1_BULLET_SPEED*2, 180, "EnemyBullet.png", "no"));
 							}
 						}
 						else {
-							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMIES_BULLET_SPEED[stages.currentStage], 180, "EnemyBullet.png"));
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMIES_BULLET_SPEED[stages.currentStage], 180, "EnemyBullet.png", "no"));
 						}
 					}
 				}
@@ -266,7 +266,34 @@ public class GameEngine
 		{
 			if (now - lastShootTime > Settings.SHOT_THRESHOLD)
 			{
-				bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png"));
+				switch(spaceship.getFirePowerLevel()) {
+				case 1:
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					break;
+				case 2:
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2+20, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2-20, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					break;
+				case 3:
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2+20, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2, spaceship.locY + spaceship.imageHeight/2-10, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2-20, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					break;
+				case 4:
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2+25, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "right"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2+20, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2-20, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2-25, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "left"));
+					break;
+				case 5:
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2+25, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "right"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "right"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "no"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "left"));
+					bullets.add(new BulletSprite(spaceship.locX + spaceship.getImageWidth()/2-25, spaceship.locY + spaceship.imageHeight/2, width, height, Settings.HERO_BULLET_SPEED, 0, "bullet.png", "left"));
+					break;
+				}
+
 				lastShootTime = now;
 				(new SoundThread(shotSoundUrl, AudioPlayer.ONCE)).start();
 			}
@@ -420,10 +447,7 @@ public class GameEngine
 			for (int i=0 ; i < stages.currentStage ; i++)
 			{
 				score += 10;
-				if (checkForLifeBonus()) {
-					numOfLives++;
-					(new SoundThread(extraLifeSoundUrl, AudioPlayer.ONCE)).start();
-				}
+				checkForLifeBonus();
 			}
 		}
 		else {
@@ -434,13 +458,15 @@ public class GameEngine
 		}
 	}
 	
-	private boolean checkForLifeBonus()
+	private void checkForLifeBonus()
 	{
 		for (int i=0 ; i<Settings.LIFE_BONUSES.length ; i++)
 		{
-			if (score==Settings.LIFE_BONUSES[i])
-				return true;
+			if (score==Settings.LIFE_BONUSES[i]) {
+				numOfLives++;
+				(new SoundThread(extraLifeSoundUrl, AudioPlayer.ONCE)).start();
+				break;
+			}
 		}
-		return false;
 	}
 }

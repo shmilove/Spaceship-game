@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 public class SpaceshipSprite extends Sprite
 {
 	protected boolean isDead = false;
+	private int firePowerLevel = 1;
+	
 	public SpaceshipSprite(int x, int y, int w, int h, int angle, int hp, int speed, String imgName) 
 	{
 		super(x, y, w, h, speed, angle, hp);
@@ -71,6 +73,21 @@ public class SpaceshipSprite extends Sprite
     public boolean getIsDead()
     {
     	return isDead;
+    }
+    
+    public int getFirePowerLevel()
+    {
+    	return firePowerLevel;
+    }
+    
+    public void increaseFirePower()
+    {
+    	firePowerLevel++;
+    }
+    
+    public void decreaseFirePower()
+    {
+    	firePowerLevel--;
     }
     
     public void updateSprite()

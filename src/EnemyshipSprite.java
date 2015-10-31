@@ -47,34 +47,6 @@ public class EnemyshipSprite extends SpaceshipSprite
 	}
 
 	
-//	private void stageOne()
-//	{
-//		hp = Settings.ENEMY1_HP;
-//		speed = Settings.ENEMY1_SPEED;
-//		fireRate = Settings.ENEMY1_FIRERATE;
-//	}
-//	
-//	private void stageTwo()
-//	{
-//		hp = Settings.ENEMY2_HP;
-//		speed = Settings.ENEMY2_SPEED;
-//		fireRate = Settings.ENEMY2_FIRERATE;
-//	}
-//	
-//	private void stageThree()
-//	{
-//		hp = Settings.ENEMY3_HP;
-//		speed = Settings.ENEMY3_SPEED;
-//		fireRate = Settings.ENEMY3_FIRERATE;
-//	}
-
-	private void stageFour()
-	{
-		hp = Settings.BOSS1_HP;
-		speed = Settings.BOSS1_SPEED;
-		fireRate = Settings.BOSS1_FIRERATE;
-	}
-	
 	public boolean fire()
 	{
 		if (!isDead)

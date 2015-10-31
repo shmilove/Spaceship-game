@@ -62,7 +62,7 @@ public class Stages
 						enemyShips.add(enemy);
 						return enemyShips;
 				}
-				// gets here if its not a boss stage;
+				// gets here only if its not a boss stage;
 				for (int i =0; i < Settings.ENEMY_IN_A_ROW; i++)
 				{
 					for (int j =0; j < Settings.ENEMY_ROWS; j++)

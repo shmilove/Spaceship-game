@@ -9,11 +9,14 @@ import javax.imageio.ImageIO;
 public class BulletSprite extends Sprite 
 {
 	private boolean markForDelete;
+	private String sideBullet;
 	
-	public BulletSprite(int x, int y, int w, int h, int speed, int angle, String imageName) 
+	public BulletSprite(int x, int y, int w, int h, int speed, int angle, String imageName, String isSideBullet) 
 	{
 		super(x, y, w, h, speed, angle,0);
 		markForDelete = false;
+		sideBullet=isSideBullet;
+		
 		try 
 		{
 			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//images//" + imageName)));
@@ -45,11 +48,15 @@ public class BulletSprite extends Sprite
 	public void updateSprite()
     {
 		super.updateSprite();
-        
-        if (locY <= 0)
+		if (sideBullet=="right")
+			locX++;
+		if (sideBullet=="left")
+			locX--;
+		
+        if (locY <= 0 || locY >= pHeight)
         	markForDelete = true;
         
-        if (locY >= pHeight)
+        if (locX <= 0 || locX >= pWidth)
         	markForDelete = true;
     }
 	
