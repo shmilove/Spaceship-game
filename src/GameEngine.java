@@ -38,6 +38,7 @@ public class GameEngine
 	private final int hitEnemy = 1, hitByEnemy = -1;
 
 	private LinkedList<BulletSprite> bullets, deleteBullets, enemyBullets ,deleteEnemyBullets;
+	private LinkedList<UpgradeSprite> upgrades, deleteUpgrades;
 
 	private long lastShootTime;
 	private long moveTime;
@@ -64,6 +65,8 @@ public class GameEngine
 		deleteBullets = new LinkedList<BulletSprite>();
 		enemyBullets = new LinkedList<BulletSprite>();
 		deleteEnemyBullets = new LinkedList<BulletSprite>();
+		upgrades = new LinkedList<UpgradeSprite>();
+		deleteUpgrades = new LinkedList<UpgradeSprite>();
 		lastShootTime = System.currentTimeMillis();
 		moveTime = System.currentTimeMillis();
 		heroCreatedTime = System.currentTimeMillis();
@@ -131,6 +134,10 @@ public class GameEngine
 		{
 			bulletSprite.drawSprite(dbg);
 		}
+		for (UpgradeSprite upgrade: upgrades)
+		{
+			upgrade.drawSprite(dbg);
+		}
 
 		for (int i = 0, x = 40; i < numOfLives; ++i, x+=50)
 		{
@@ -191,6 +198,7 @@ public class GameEngine
 			}
 
 			removeEnemies();
+			removeUpgrades();
 
 			spaceship.updateSprite();
 			for (BulletSprite bullet : bullets)
@@ -200,6 +208,10 @@ public class GameEngine
 			}
 			for (BulletSprite bulletSprite : enemyBullets) {
 				bulletSprite.updateSprite();
+			}
+			for (UpgradeSprite upgrade : upgrades)
+			{
+				upgrade.updateSprite();
 			}
 		}
 
@@ -330,7 +342,7 @@ public class GameEngine
 						bullet.setIsCollide();
 						enemy.gotHit(1);
 						if (enemy.isDead)
-							tryFirePowerBonus();
+							tryFirePowerBonus(enemy.getLocX(), enemy.getLocY());
 						if (stages.isBossStage() && enemy.isDead)
 							(new SoundThread(bigExplosionSoundUrl, AudioPlayer.ONCE)).start();
 						collision = true;
@@ -360,6 +372,19 @@ public class GameEngine
 				}
 			}
 		}
+		for (UpgradeSprite upgrade: upgrades)
+		{
+			if (!upgrade.getIsCollide() && CollisionDetection.isRectangleCollide(upgrade.getBoundingBox(), spaceship.getBoundingBox()))
+			{
+				if (CollisionDetection.isPixelCollide((int)upgrade.locX, (int)upgrade.locY, upgrade.bImage, (int)spaceship.locX, (int)spaceship.locY, spaceship.bImage))
+				{
+					spaceship.increaseFirePower();
+					upgrade.setIsCollide();
+					collision = true;
+				}
+			}
+		}
+		
 		return collision;
 	}
 
@@ -444,6 +469,19 @@ public class GameEngine
 		}
 		enemyShips.removeAll(deleteEnemyShips);
 	}
+	
+	private void removeUpgrades()
+	{
+		deleteUpgrades.clear();
+		for (UpgradeSprite upgrade: upgrades)
+		{
+			if (upgrade.getIsCollide() || upgrade.getMarkForDelete())
+			{
+				deleteUpgrades.add(upgrade);
+			}
+		}
+		upgrades.removeAll(deleteUpgrades);
+	}
 
 	private void updateScore(int whoHitWho)
 	{
@@ -474,12 +512,13 @@ public class GameEngine
 		}
 	}
 	
-	private void tryFirePowerBonus()
+	private void tryFirePowerBonus(int enemyX, int enemyY)
 	{
 		Random rand = new Random();
 		int randomNum = rand.nextInt(100);
-		if (randomNum < 5)
-			System.out.println("give bonus");	
-
+		if (randomNum < 4)
+		{	
+			upgrades.add(new UpgradeSprite(enemyX, enemyY, width, height, 2, 90, "firepowerBonus.png"));
+		}
 	}
 }

@@ -15,7 +15,7 @@ public class SpaceshipSprite extends Sprite
 	public SpaceshipSprite(int x, int y, int w, int h, int angle, int hp, int speed, String imgName) 
 	{
 		super(x, y, w, h, speed, angle, hp);
-		firePowerLevel=5;
+		firePowerLevel=1;
 		try 
 		{
 			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//images//" + imgName)));
@@ -83,7 +83,8 @@ public class SpaceshipSprite extends Sprite
     
     public void increaseFirePower()
     {
-    	firePowerLevel++;
+    	if (firePowerLevel < 5)
+    		firePowerLevel++;
     }
     
     public void decreaseFirePower()

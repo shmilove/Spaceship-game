@@ -70,13 +70,13 @@ public class Settings
 	private static final int ENEMY6_HEIGHT_SPACE = 50;
 	
 	public static final int BOSS1_STAGE = 4;
-	public static final int BOSS1_HP = 100;
+	public static final int BOSS1_HP = 200;
 	public static final int BOSS1_SPEED = 5;
 	public static final int BOSS1_BULLET_SPEED = 2;
 	public static final int BOSS1_FIRERATE = 13; 
 
 	public static final int BOSS2_STAGE = 8;
-	public static final int BOSS2_HP = 200;
+	public static final int BOSS2_HP = 350;
 	public static final int BOSS2_SPEED = 7;
 	public static final int BOSS2_BULLET_SPEED = 4;
 	public static final int BOSS2_FIRERATE = 17; 
