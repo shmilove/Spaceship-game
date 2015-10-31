@@ -104,7 +104,7 @@ public class Stages
 		}
 	}
 	
-	public static boolean isBossStage()
+	public boolean isBossStage()
 	{
 		if (currentStage==Settings.BOSS1_STAGE || currentStage==Settings.BOSS2_STAGE)
 			return true;

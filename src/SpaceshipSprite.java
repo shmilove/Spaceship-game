@@ -1,6 +1,6 @@
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
+//import java.awt.Rectangle;
+//import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 
@@ -10,11 +10,12 @@ import javax.imageio.ImageIO;
 public class SpaceshipSprite extends Sprite
 {
 	protected boolean isDead = false;
-	private int firePowerLevel = 1;
+	private int firePowerLevel;
 	
 	public SpaceshipSprite(int x, int y, int w, int h, int angle, int hp, int speed, String imgName) 
 	{
 		super(x, y, w, h, speed, angle, hp);
+		firePowerLevel=5;
 		try 
 		{
 			setImage(ImageIO.read(new File(System.getProperty("user.dir") + "//images//" + imgName)));
@@ -87,7 +88,15 @@ public class SpaceshipSprite extends Sprite
     
     public void decreaseFirePower()
     {
-    	firePowerLevel--;
+    	if (firePowerLevel > 2)
+    		firePowerLevel -= 2;
+    	else
+    		firePowerLevel = 1;
+    }
+    
+    public void setFirePower(int firePower)
+    {
+    	firePowerLevel = firePower;
     }
     
     public void updateSprite()

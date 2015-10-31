@@ -6,11 +6,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.sql.Time;
-import java.time.Instant;
+//import java.sql.Time;
+//import java.time.Instant;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 
 
 public class GameEngine 
@@ -184,7 +184,7 @@ public class GameEngine
 							}
 						}
 						else {
-							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMIES_BULLET_SPEED[stages.currentStage], 180, "EnemyBullet.png", "no"));
+							enemyBullets.add(new BulletSprite(enemyshipSprite.getLocX() + enemyshipSprite.getImageWidth()/2, enemyshipSprite.getLocY() + enemyshipSprite.imageHeight/2, width, height, Settings.ENEMIES_BULLET_SPEED[Stages.currentStage], 180, "EnemyBullet.png", "no"));
 						}
 					}
 				}
@@ -312,6 +312,7 @@ public class GameEngine
 				if (CollisionDetection.isPixelCollide((int)enemy.locX, (int)enemy.locY, enemy.bImage, (int)spaceship.locX, (int)spaceship.locY, spaceship.bImage))
 				{
 					spaceship.setIsCollide();
+					spaceship.decreaseFirePower();
 					enemy.gotHit(1);
 					collision = true;
 					(new SoundThread(explodeSoundUrl, AudioPlayer.ONCE)).start();
@@ -328,7 +329,9 @@ public class GameEngine
 					{
 						bullet.setIsCollide();
 						enemy.gotHit(1);
-						if (stages.isBossStage() && enemy.hp<=0)
+						if (enemy.isDead)
+							tryFirePowerBonus();
+						if (stages.isBossStage() && enemy.isDead)
 							(new SoundThread(bigExplosionSoundUrl, AudioPlayer.ONCE)).start();
 						collision = true;
 						updateScore(hitEnemy);
@@ -349,6 +352,7 @@ public class GameEngine
 				if (CollisionDetection.isPixelCollide((int)bullet.locX, (int)bullet.locY, bullet.bImage, (int)spaceship.locX, (int)spaceship.locY, spaceship.bImage))
 				{
 					spaceship.setIsCollide();
+					spaceship.decreaseFirePower();
 					bullet.setIsCollide();
 					collision = true;
 					(new SoundThread(explodeSoundUrl, AudioPlayer.ONCE)).start();
@@ -356,8 +360,6 @@ public class GameEngine
 				}
 			}
 		}
-
-
 		return collision;
 	}
 
@@ -396,7 +398,9 @@ public class GameEngine
 			numOfLives--;
 			if (numOfLives > 0)
 			{
+				int firePower = spaceship.getFirePowerLevel();
 				spaceship = new SpaceshipSprite(width / 2 - 45, height - 100, width, height, 0, Settings.HERO_HP, Settings.HERO_SPEED, "spaceship.png");
+				spaceship.setFirePower(firePower);
 				heroCreatedTime = System.currentTimeMillis();
 				blinkTime = heroCreatedTime;
 			}
@@ -444,7 +448,7 @@ public class GameEngine
 	private void updateScore(int whoHitWho)
 	{
 		if (whoHitWho == hitEnemy) {
-			for (int i=0 ; i < stages.currentStage ; i++)
+			for (int i=0 ; i < Stages.currentStage ; i++)
 			{
 				score += 10;
 				checkForLifeBonus();
@@ -468,5 +472,14 @@ public class GameEngine
 				break;
 			}
 		}
+	}
+	
+	private void tryFirePowerBonus()
+	{
+		Random rand = new Random();
+		int randomNum = rand.nextInt(100);
+		if (randomNum < 5)
+			System.out.println("give bonus");	
+
 	}
 }

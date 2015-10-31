@@ -1,5 +1,5 @@
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
+//import java.awt.Rectangle;
 import java.util.Random;
 
 
@@ -45,6 +45,7 @@ public class EnemyshipSprite extends SpaceshipSprite
 	{
 		g.drawImage(bImage, locX, locY, null);
 	}
+
 
 	
 	public boolean fire()
