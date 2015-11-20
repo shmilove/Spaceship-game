@@ -1,8 +1,13 @@
+/*
+ *  Authors: Elad Mizrahi & Ben Nakash
+ *  ID's:	 201550142		303140057
+ *  Desc:	See README.doc file.
+ */
+
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 public class UpgradeSprite extends Sprite 

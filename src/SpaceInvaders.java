@@ -1,3 +1,9 @@
+/*
+ *  Authors: Elad Mizrahi & Ben Nakash
+ *  ID's:	 201550142		303140057
+ *  Desc:	See README.doc file.
+ */
+
 import javax.swing.JFrame;
 
 public class SpaceInvaders 
@@ -11,6 +17,5 @@ public class SpaceInvaders
         GamePanel p = new GamePanel();
         frame.add(p);
         frame.setVisible(true);
-        
     }
 }

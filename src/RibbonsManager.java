@@ -1,3 +1,9 @@
+/*
+ *  Authors: Elad Mizrahi & Ben Nakash
+ *  ID's:	 201550142		303140057
+ *  Desc:	See README.doc file.
+ */
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;

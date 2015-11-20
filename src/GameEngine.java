@@ -1,3 +1,9 @@
+/*
+ *  Authors: Elad Mizrahi & Ben Nakash
+ *  ID's:	 201550142		303140057
+ *  Desc:	See README.doc file.
+ */
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -6,11 +12,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
-//import java.sql.Time;
-//import java.time.Instant;
 import java.util.LinkedList;
 import java.util.Random;
-//import java.util.concurrent.TimeUnit;
 
 
 public class GameEngine 
